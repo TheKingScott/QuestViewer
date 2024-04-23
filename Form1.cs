@@ -32,7 +32,66 @@ namespace QuestEditor_V2
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var myForm = new QuestDummyEvent();
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestDummyEvent.dat");
+            myForm.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestGainItemEvent.dat");
+            myForm.Show();
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestGradeEvent.dat");
+            myForm.Show();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestKillOtherRaceEvent.dat");
+            myForm.Show();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestLvLimitEvent.dat");
+            myForm.Show();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            //
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestLvUpEvent.dat");
+            myForm.Show();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestMasteryEvent.dat");
+            myForm.Show();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestNPCEvent.dat");
+            myForm.Show();
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            var myForm = new QuestHappenEvent();
+            myForm.ReadFile("QuestPromoteEvent.dat");
             myForm.Show();
         }
     }

@@ -7,7 +7,7 @@
     <Compile Update="HolyStone.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="QuestDummyEvent.cs">
+    <Compile Update="QuestHappenEvent.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Quest_Dat.cs">
