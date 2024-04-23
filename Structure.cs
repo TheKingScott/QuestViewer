@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Devices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static QuestEditor_V2.Structure;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace QuestEditor_V2
 {
@@ -58,7 +60,7 @@ namespace QuestEditor_V2
             public int m_nConspvppoint;
             public int m_nConsGold;
             public int m_bSelectConsITMenual;
-            public List<_quest_reward_item >m_RewardItem;//6
+            public List<_quest_reward_item> m_RewardItem;//6
             public List<_quest_reward_mastery> m_RewardMastery;//2          
             public byte[] m_strConsSkillCode;//64
             public int m_nConsSkillCnt;
@@ -137,7 +139,7 @@ namespace QuestEditor_V2
             header.m_bCompQuestType = Bin.ReadInt32();
             //setup list
             header.m_ActionNode = new List<_action_node> { Read_Action_Node(Bin), Read_Action_Node(Bin), Read_Action_Node(Bin) };
-          
+
 
             header.m_nMaxLevel = Bin.ReadInt32();
             header.m_dConsExp = Bin.ReadDouble(); //8 bits
@@ -146,7 +148,7 @@ namespace QuestEditor_V2
             header.m_nConspvppoint = Bin.ReadInt32();
             header.m_nConsGold = Bin.ReadInt32();
             header.m_bSelectConsITMenual = Bin.ReadInt32();
-            header.m_RewardItem =new List<_quest_reward_item> { Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin) } ;//6         
+            header.m_RewardItem = new List<_quest_reward_item> { Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin) };//6         
             header.m_RewardMastery = new List<_quest_reward_mastery> { Read_Quest_Reward_Mastery(Bin), Read_Quest_Reward_Mastery(Bin) };//2        
             header.m_strConsSkillCode = Bin.ReadBytes(64);//64
             header.m_nConsSkillCnt = Bin.ReadInt32();
@@ -159,7 +161,7 @@ namespace QuestEditor_V2
             header.m_strLinkQuest_4 = Bin.ReadBytes(64);//64
             header.m_nLinkQuestGroupID = Bin.ReadInt32();
             header.m_bFailCheck = Bin.ReadInt32();
-            header.m_QuestFailCond = new List<_quest_fail_condition> { Read_Quest_Fail_Condition(Bin), Read_Quest_Fail_Condition(Bin), Read_Quest_Fail_Condition(Bin) } ;//3        
+            header.m_QuestFailCond = new List<_quest_fail_condition> { Read_Quest_Fail_Condition(Bin), Read_Quest_Fail_Condition(Bin), Read_Quest_Fail_Condition(Bin) };//3        
             header.m_strFailBriefCode = Bin.ReadBytes(64);//64
             header.m_nLinkDummyCond = Bin.ReadInt32();
             header.m_strLinkDummyCode = Bin.ReadBytes(64);//64
@@ -321,6 +323,77 @@ namespace QuestEditor_V2
                 short index = item.data_1.ElementAt(i).SplitNameLength;
                 item.data_2.Add(Read_Dynamic_String(Bin, index));
             }
+            return item;
+        }
+
+        // Other quest files::
+
+        public struct _happen_event_condition_node
+        {
+            public int m_nCondType;
+            public int m_nCondSubType;
+            public byte[] m_sCondVal;//64
+        };
+
+        public _happen_event_condition_node Read_happen_event_condition_node(BinaryReader Bin)
+        {
+            _happen_event_condition_node item = new _happen_event_condition_node();
+            item.m_nCondType = Bin.ReadInt32();
+            item.m_nCondSubType = Bin.ReadInt32();
+            item.m_sCondVal = Bin.ReadBytes(64);
+            return item;
+        }
+
+        public struct _happen_event_node
+        {
+            public int m_bUse;
+            public int m_bQuestRepeat;
+            public int m_nQuestType;
+            public int m_bSelectQuestManual;
+            public int m_nAcepProNum;
+            public int m_nAcepProDen;
+            public List<_happen_event_condition_node> m_CondNode;//5
+            public byte[] m_strLinkQuest_0;//64
+            public byte[] m_strLinkQuest_1;//64
+            public byte[] m_strLinkQuest_2;//64
+            public byte[] m_strLinkQuest_3;//64
+            public byte[] m_strLinkQuest_4;//64
+        };
+
+        public _happen_event_node Read_happen_event_node(BinaryReader Bin)
+        {
+            _happen_event_node item = new _happen_event_node();
+            item.m_bUse = Bin.ReadInt32();
+            item.m_bQuestRepeat = Bin.ReadInt32();
+            item.m_nQuestType = Bin.ReadInt32();
+            item.m_bSelectQuestManual = Bin.ReadInt32();
+            item.m_nAcepProNum = Bin.ReadInt32();
+            item.m_nAcepProDen = Bin.ReadInt32();
+            item.m_CondNode = new List<_happen_event_condition_node> { Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin) };
+            item.m_strLinkQuest_0 = Bin.ReadBytes(64);
+            item.m_strLinkQuest_1 = Bin.ReadBytes(64);
+            item.m_strLinkQuest_2 = Bin.ReadBytes(64);
+            item.m_strLinkQuest_3 = Bin.ReadBytes(64);
+            item.m_strLinkQuest_4 = Bin.ReadBytes(64);
+            return item;
+        }
+
+
+        public struct _QuestHappenEvent_fld
+        {
+            public uint m_dwIndex;
+            public byte[] m_strCode;//64
+            public int m_nEevntNo;
+            public List<_happen_event_node> m_Node;//3
+        };
+
+        public _QuestHappenEvent_fld Read_QuestHappenEvent_fld(BinaryReader Bin)
+        {
+            _QuestHappenEvent_fld item = new _QuestHappenEvent_fld();
+            item.m_dwIndex = Bin.ReadUInt32();
+            item.m_strCode = Bin.ReadBytes(64);
+            item.m_nEevntNo = Bin.ReadInt32();
+            item.m_Node = new List<_happen_event_node> { Read_happen_event_node(Bin), Read_happen_event_node(Bin), Read_happen_event_node(Bin) };
             return item;
         }
     }
