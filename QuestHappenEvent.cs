@@ -238,12 +238,16 @@ namespace QuestEditor_V2
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {          
+        {
+            var tester = e.Node.Text;
             Quest_KV_List.Get(Index);
             string name = this.treeView1.SelectedNode.Text;
             string[] GetNames = Quest_KV_List.GetValues(name);
+           
             int x = Int32.Parse(GetNames[0]);
-            Index = (int)Quests[x].m_dwIndex;
+            Index = Math.Clamp((int)Quests[x].m_dwIndex,0, Quest_KV_List.Count-1);
+           
+                 
             Fill_Quest_Data();          
             
         }
