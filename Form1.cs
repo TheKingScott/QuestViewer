@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,13 +21,15 @@ namespace QuestEditor_V2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var myForm = new Quest_Dat();
+            var myForm = new _Quest_fld();
+            myForm.ReadFile("Quest.dat");
             myForm.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var myForm = new HolyStone();
+            var myForm = new _Quest_fld();
+            myForm.ReadFile("HolyStoneKeepperQuest.dat");
             myForm.Show();
         }
 
