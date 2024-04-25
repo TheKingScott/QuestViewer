@@ -193,7 +193,7 @@ namespace QuestEditor_V2
 
         }
 
-        public struct STR_Monster
+        public struct STR_File
         {
             public int m_dwIndex;
             public byte[] m_strCode;//64
@@ -211,9 +211,9 @@ namespace QuestEditor_V2
 
         }
 
-        public STR_Monster Read_STR_Monster(BinaryReader Bin)
+        public STR_File Read_STR_Monster(BinaryReader Bin)
         {
-            STR_Monster header = new STR_Monster();
+            STR_File header = new STR_File();
             header.m_dwIndex = Bin.ReadInt32();
             header.m_strCode = Bin.ReadBytes(64);
             header.m_strName_0 = Bin.ReadBytes(64);
@@ -228,7 +228,26 @@ namespace QuestEditor_V2
             header.m_strName_9 = Bin.ReadBytes(64);
             header.m_strName_10 = Bin.ReadBytes(64);
 
+            return header;
+        }
 
+
+        public STR_File Read_Quest_STR(BinaryReader Bin)
+        {
+            STR_File header = new STR_File();
+            header.m_dwIndex = Bin.ReadInt32();
+            header.m_strCode = Bin.ReadBytes(64);
+            header.m_strName_0 = Bin.ReadBytes(2560);
+            header.m_strName_1 = Bin.ReadBytes(2560);
+            header.m_strName_2 = Bin.ReadBytes(2560);
+            header.m_strName_3 = Bin.ReadBytes(2560);
+            header.m_strName_4 = Bin.ReadBytes(2560);
+            header.m_strName_5 = Bin.ReadBytes(2560);
+            header.m_strName_6 = Bin.ReadBytes(2560);
+            header.m_strName_7 = Bin.ReadBytes(2560);
+            header.m_strName_8 = Bin.ReadBytes(2560);
+            header.m_strName_9 = Bin.ReadBytes(2560);
+            header.m_strName_10 = Bin.ReadBytes(2560);
 
             return header;
         }
@@ -395,6 +414,74 @@ namespace QuestEditor_V2
             item.m_nEevntNo = Bin.ReadInt32();
             item.m_Node = new List<_happen_event_node> { Read_happen_event_node(Bin), Read_happen_event_node(Bin), Read_happen_event_node(Bin) };
             return item;
+        }
+
+        //not from zoneheader reading
+        public struct QuestTextCode
+        {
+            public int m_dwIndex;
+            public byte[] m_strCode_0;
+            public byte[] m_strQuestBriefContents_0;//
+            public byte[] m_strQuestBriefContents_1;//
+            public byte[] m_strQuestBriefContents_2;//
+            public byte[] m_strQuestBriefContents_3;//
+            public byte[] m_strQuestBriefContents_4;//
+            public byte[] m_strQuestSummaryContents_0;
+            public byte[] m_strQuestSummaryContents_1;
+            public byte[] m_strQuestSummaryContents_2;
+            public byte[] m_strQuestSummaryContents_3;
+            public byte[] m_strQuestSummaryContents_4;
+            public byte[] m_strQuestConditionResult_0;//
+            public byte[] m_strQuestConditionResult_1;//
+            public byte[] m_strQuestConditionResult_2;//
+            public byte[] m_strQuestConditionResult_3;//
+            public byte[] m_strQuestConditionResult_4;//
+            public byte[] m_strQuestFinishContents_U0;
+            public byte[] m_strQuestFinishContents_U1;
+            public byte[] m_strQuestFinishContents_U2;
+            public byte[] m_strQuestFinishContents_U3;
+            public byte[] m_strQuestFinishContents_U4;
+            public byte[] m_strQuestFinishContents_F0;
+            public byte[] m_strQuestFinishContents_F1;
+            public byte[] m_strQuestFinishContents_F2;
+            public byte[] m_strQuestFinishContents_F3;
+            public byte[] m_strQuestFinishContents_F4;
+
+        }
+
+
+        public QuestTextCode Read_QuestTextCode(BinaryReader Bin)
+        {
+            QuestTextCode header = new QuestTextCode();
+            header.m_dwIndex = Bin.ReadInt32();
+            header.m_strCode_0 = Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_0= Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_1= Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_2= Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_3= Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_4 = Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_0= Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_1= Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_2= Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_3= Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_4 = Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_0= Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_1= Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_2= Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_3= Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_4= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U0= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U1= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U2= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U3= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U4= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F0= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F1= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F2= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F3= Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F4 = Bin.ReadBytes(64);
+
+            return header;
         }
     }
 }

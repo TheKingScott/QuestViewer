@@ -242,6 +242,17 @@
             label90 = new Label();
             label89 = new Label();
             ND_Quest_Item = new Label();
+            QuestTextCode = new TabPage();
+            QuestSummary = new RichTextBox();
+            QuestFinish_1 = new RichTextBox();
+            QuestFinish_0 = new RichTextBox();
+            QuestCondition = new RichTextBox();
+            QuestBrief = new RichTextBox();
+            label60 = new Label();
+            label92 = new Label();
+            label93 = new Label();
+            label94 = new Label();
+            label95 = new Label();
             groupBox15.SuspendLayout();
             Quest_Links.SuspendLayout();
             Action_Node.SuspendLayout();
@@ -263,6 +274,7 @@
             groupBox13.SuspendLayout();
             groupBox12.SuspendLayout();
             ND_Quest.SuspendLayout();
+            QuestTextCode.SuspendLayout();
             SuspendLayout();
             // 
             // treeView1
@@ -883,6 +895,7 @@
             Quest_Links.Controls.Add(Reward_Mastery);
             Quest_Links.Controls.Add(Fail_Condition);
             Quest_Links.Controls.Add(ND_Quest);
+            Quest_Links.Controls.Add(QuestTextCode);
             Quest_Links.Location = new Point(794, 12);
             Quest_Links.Name = "Quest_Links";
             Quest_Links.SelectedIndex = 0;
@@ -2227,7 +2240,112 @@
             ND_Quest_Item.TabIndex = 0;
             ND_Quest_Item.Text = "Item";
             // 
-            // Form1
+            // QuestTextCode
+            // 
+            QuestTextCode.Controls.Add(label95);
+            QuestTextCode.Controls.Add(label94);
+            QuestTextCode.Controls.Add(label93);
+            QuestTextCode.Controls.Add(label92);
+            QuestTextCode.Controls.Add(label60);
+            QuestTextCode.Controls.Add(QuestSummary);
+            QuestTextCode.Controls.Add(QuestFinish_1);
+            QuestTextCode.Controls.Add(QuestFinish_0);
+            QuestTextCode.Controls.Add(QuestCondition);
+            QuestTextCode.Controls.Add(QuestBrief);
+            QuestTextCode.Location = new Point(4, 24);
+            QuestTextCode.Name = "QuestTextCode";
+            QuestTextCode.Padding = new Padding(3);
+            QuestTextCode.Size = new Size(529, 570);
+            QuestTextCode.TabIndex = 5;
+            QuestTextCode.Text = "QuestTextCode";
+            QuestTextCode.UseVisualStyleBackColor = true;
+            // 
+            // QuestSummary
+            // 
+            QuestSummary.Location = new Point(31, 377);
+            QuestSummary.Name = "QuestSummary";
+            QuestSummary.Size = new Size(189, 130);
+            QuestSummary.TabIndex = 4;
+            QuestSummary.Text = "";
+            // 
+            // QuestFinish_1
+            // 
+            QuestFinish_1.Location = new Point(284, 206);
+            QuestFinish_1.Name = "QuestFinish_1";
+            QuestFinish_1.Size = new Size(189, 130);
+            QuestFinish_1.TabIndex = 3;
+            QuestFinish_1.Text = "";
+            // 
+            // QuestFinish_0
+            // 
+            QuestFinish_0.Location = new Point(31, 206);
+            QuestFinish_0.Name = "QuestFinish_0";
+            QuestFinish_0.Size = new Size(189, 130);
+            QuestFinish_0.TabIndex = 2;
+            QuestFinish_0.Text = "";
+            // 
+            // QuestCondition
+            // 
+            QuestCondition.Location = new Point(284, 40);
+            QuestCondition.Name = "QuestCondition";
+            QuestCondition.Size = new Size(189, 131);
+            QuestCondition.TabIndex = 1;
+            QuestCondition.Text = "";
+            // 
+            // QuestBrief
+            // 
+            QuestBrief.Location = new Point(31, 41);
+            QuestBrief.Name = "QuestBrief";
+            QuestBrief.Size = new Size(189, 130);
+            QuestBrief.TabIndex = 0;
+            QuestBrief.Text = "";
+            // 
+            // label60
+            // 
+            label60.AutoSize = true;
+            label60.Location = new Point(38, 14);
+            label60.Name = "label60";
+            label60.Size = new Size(62, 15);
+            label60.TabIndex = 5;
+            label60.Text = "QuestBrief";
+            // 
+            // label92
+            // 
+            label92.AutoSize = true;
+            label92.Location = new Point(284, 14);
+            label92.Name = "label92";
+            label92.Size = new Size(91, 15);
+            label92.TabIndex = 6;
+            label92.Text = "QuestCondition";
+            // 
+            // label93
+            // 
+            label93.AutoSize = true;
+            label93.Location = new Point(31, 180);
+            label93.Name = "label93";
+            label93.Size = new Size(80, 15);
+            label93.TabIndex = 7;
+            label93.Text = "QuestFinish_0";
+            // 
+            // label94
+            // 
+            label94.AutoSize = true;
+            label94.Location = new Point(295, 182);
+            label94.Name = "label94";
+            label94.Size = new Size(80, 15);
+            label94.TabIndex = 8;
+            label94.Text = "QuestFinish_1";
+            // 
+            // label95
+            // 
+            label95.AutoSize = true;
+            label95.Location = new Point(31, 348);
+            label95.Name = "label95";
+            label95.Size = new Size(89, 15);
+            label95.TabIndex = 9;
+            label95.Text = "QuestSummary";
+            // 
+            // _Quest_fld
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -2235,7 +2353,7 @@
             Controls.Add(Quest_Links);
             Controls.Add(groupBox15);
             Controls.Add(treeView1);
-            Name = "Form1";
+            Name = "_Quest_fld";
             Text = "2.2.3.2 Quest Viewer";
             groupBox15.ResumeLayout(false);
             groupBox15.PerformLayout();
@@ -2276,6 +2394,8 @@
             groupBox12.PerformLayout();
             ND_Quest.ResumeLayout(false);
             ND_Quest.PerformLayout();
+            QuestTextCode.ResumeLayout(false);
+            QuestTextCode.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -2495,5 +2615,16 @@
         private Label Reward_Item_3;
         private Label Reward_Item_2;
         private Label Reward_Item_1;
+        private TabPage QuestTextCode;
+        private RichTextBox QuestSummary;
+        private RichTextBox QuestFinish_1;
+        private RichTextBox QuestFinish_0;
+        private RichTextBox QuestCondition;
+        private RichTextBox QuestBrief;
+        private Label label93;
+        private Label label92;
+        private Label label60;
+        private Label label95;
+        private Label label94;
     }
 }
