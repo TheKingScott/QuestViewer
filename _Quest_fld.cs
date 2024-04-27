@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using static QuestEditor_V2.Structure;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace QuestEditor_V2
 {
@@ -11,8 +15,10 @@ namespace QuestEditor_V2
     {
         Structure STR = new Structure();
         int QuestIndex = 0;
-        ND_Quest ND_Quests = new ND_Quest();
-        List<Structure._Quest_fld> Quests;     
+        string OpenFile;
+
+        public Structure._Quest_fld[] QuestEdit { get; set; }
+
         List<STR_File> STR_Monsters;
         List<STR_File> STR_NPCs;
         List<STR_File> STR_ITEMS;
@@ -21,6 +27,7 @@ namespace QuestEditor_V2
         List<STR_File> STR_QuestSummaryContents;
         List<STR_File> STR_QuestBriefContents;
         List<STR_File> STR_QuestConditionResult;
+        List<STR_File> STR_QuestName;
 
         NameValueCollection ITEM_KV_List = new NameValueCollection();
         NameValueCollection NPC_KV_List = new NameValueCollection();
@@ -30,14 +37,17 @@ namespace QuestEditor_V2
         NameValueCollection QuestCondition_KV_List = new NameValueCollection();
         NameValueCollection QuestFinish_KV_List = new NameValueCollection();
         NameValueCollection QuestSummary_KV_List = new NameValueCollection();
+        NameValueCollection QuestName_KV_List = new NameValueCollection();
 
         public _Quest_fld()
         {
             InitializeComponent();
-            
+
         }
+
         public void ReadFile(string path)
         {
+            OpenFile = path;
             if (File.Exists(path))
             {
                 this.Text = path;
@@ -47,15 +57,17 @@ namespace QuestEditor_V2
                     int _Header = reader.ReadInt32();
                     int _columns = reader.ReadInt32();
                     int _size = reader.ReadInt32();
+                    QuestEdit = new Structure._Quest_fld[_Header];
 
-                    Quests = new List<Structure._Quest_fld>();
                     for (int i = 0; i < _Header; i++)
                     {
-                        Quests.Add(STR.Read_Quest_Fld(reader));
+                        QuestEdit[i] = STR.Read_Quest_Fld(reader);
 
                     }
 
-                    GC.KeepAlive(Quests);
+                    GC.KeepAlive(QuestEdit);
+
+
                     reader.Dispose();
                     reader.Close();
 
@@ -65,18 +77,18 @@ namespace QuestEditor_V2
                     treeView1.Nodes.Add(root0);
                     treeView1.Nodes.Add(root1);
                     treeView1.Nodes.Add(root2);
-                    for (int i = 0; i < Quests.Count; i++)
+                    for (int i = 0; i < _Header; i++)
                     {
-                        string ID = Encoding.UTF8.GetString(Quests[i].m_strCode, 0, Quests[i].m_strCode.Length);
+                        string ID = Encoding.UTF8.GetString(QuestEdit[i].m_strCode, 0, QuestEdit[i].m_strCode.Length);
                         //add index value to compare here
                         Quest_KV_List.Add(ID, i.ToString());
 
-                        if (Quests[i].m_n2 == 0)
+                        if (QuestEdit[i].m_n2 == 0)
                         {
                             root0.Nodes.Add(ID);
 
                         }
-                        else if (Quests[i].m_n2 == 1)
+                        else if (QuestEdit[i].m_n2 == 1)
                         {
                             root1.Nodes.Add(ID);
 
@@ -89,11 +101,11 @@ namespace QuestEditor_V2
 
                     }
 
+
                 }
             }
-           
-            NDQuest();
-                               
+
+
             if (path == "HolyStoneKeepperQuest.dat")
             {
                 Monster_KV_List.Add("09B00", "09B00 AKA BCC");
@@ -112,7 +124,45 @@ namespace QuestEditor_V2
             QuestSummaryContents();
             QuestFinishContents();
             QuestTextCodeRead();
-             Fill_Quest_Data();
+            QuestNameContents();
+            Fill_Quest_Data();
+        }
+        private void QuestNameContents()
+        {
+            string path = "QuestNameContents_str.dat";
+            if (File.Exists(path))
+            {
+                using (var stream = System.IO.File.OpenRead(path))
+                using (var reader = new BinaryReader(stream))
+                {
+                    int _Header = reader.ReadInt32();
+                    int _columns = reader.ReadInt32();
+                    int _size = reader.ReadInt32();
+
+                    STR_QuestName = new List<STR_File>();
+                    for (int i = 0; i < _Header; i++)
+                    {
+                        STR_QuestName.Add(STR.Read_Quest_STR(reader));
+
+                    }
+                    foreach (var str in STR_QuestName)
+                    {
+                        string ID = Encoding.UTF8.GetString(str.m_strCode, 0, str.m_strCode.Length);
+                        string name = Encoding.UTF8.GetString(str.m_strName_3, 0, str.m_strName_3.Length);
+
+                        string purge0 = ID.Replace("\0", string.Empty);
+                        string purge1 = name.Replace("\0", string.Empty);
+
+                        QuestName_KV_List.Add(purge0, purge1);
+
+                    }
+
+                    GC.KeepAlive(STR_QuestName);
+                    reader.Dispose();
+                    reader.Close();
+                }
+
+            }
         }
 
         private void QuestTextCodeRead()
@@ -141,7 +191,7 @@ namespace QuestEditor_V2
                 }
 
             }
-           
+
 
 
         }
@@ -283,31 +333,11 @@ namespace QuestEditor_V2
                     }
 
                 }
-            
+
             }
 
         }
-        
-        
-        private void NDQuest()
-        {
-            string path = "NDQuest.dat";
-            if (File.Exists(path))
-            {
-                using (var stream = System.IO.File.OpenRead("NDQuest.dat"))
-                using (var reader = new BinaryReader(stream))
-                {
 
-                    Structure STR = new Structure();
-                    ND_Quests = STR.Read_ND_Quest(reader);
-
-                    reader.Dispose();
-                    reader.Close();
-                }
-            }
-            
-
-        }
         private void NPCCharacter()
         {
             string path = "NPCharacter_str.dat";
@@ -342,7 +372,7 @@ namespace QuestEditor_V2
                     reader.Close();
                 }
             }
-               
+
 
         }
 
@@ -1087,7 +1117,7 @@ namespace QuestEditor_V2
                 }
             }
 
-              
+
         }
 
         private void MonsterCharacter_str()
@@ -1124,14 +1154,14 @@ namespace QuestEditor_V2
                     reader.Close();
                 }
             }
-               
+
 
         }
 
         public void Fill_Quest_Data()
         {
             Helpers helper = new Helpers();
-            Structure._Quest_fld Quest = Quests[QuestIndex];
+            Structure._Quest_fld Quest = QuestEdit[QuestIndex];
             m_nActType_0.Text = Quest.m_ActionNode[0].m_nActType.ToString();
             Enum_ActType_0.Text = STR._Action_Node_m_nActTypes(Quest.m_ActionNode[0].m_nActType);
             if (Quest.m_ActionNode[0].m_nActType == 3)
@@ -1141,11 +1171,11 @@ namespace QuestEditor_V2
                 try
                 {
                     string[] values = Monster_KV_List.GetValues(purge0);
-                    if(values != null)
+                    if (values != null)
                     {
                         Monster_node_0.Text = values[0];
                     }
-                   
+
 
                 }
                 catch
@@ -1309,7 +1339,7 @@ namespace QuestEditor_V2
             m_nConsITCnt_5.Text = Quest.m_RewardItem[5].m_nConsITCnt.ToString();
             m_nLinkQuestIdx_5.Text = Quest.m_RewardItem[5].m_nLinkQuestIdx.ToString();
 
-            
+
             if (Quest.m_RewardItem[0].m_nConsITCnt > 0)
             {
                 string ID = Encoding.UTF8.GetString(Quest.m_RewardItem[0].m_strConsITCode, 0, Quest.m_RewardItem[0].m_strConsITCode.Length);
@@ -1333,7 +1363,7 @@ namespace QuestEditor_V2
             {
                 Reward_Item_0.Text = "";
             }
-            
+
             if (Quest.m_RewardItem[1].m_nConsITCnt > 0)
             {
                 string ID = Encoding.UTF8.GetString(Quest.m_RewardItem[1].m_strConsITCode, 0, Quest.m_RewardItem[1].m_strConsITCode.Length);
@@ -1356,7 +1386,7 @@ namespace QuestEditor_V2
             {
                 Reward_Item_1.Text = "";
             }
-            
+
             if (Quest.m_RewardItem[2].m_nConsITCnt > 0)
             {
                 string ID = Encoding.UTF8.GetString(Quest.m_RewardItem[2].m_strConsITCode, 0, Quest.m_RewardItem[2].m_strConsITCode.Length);
@@ -1379,7 +1409,7 @@ namespace QuestEditor_V2
             {
                 Reward_Item_2.Text = "";
             }
-            
+
             if (Quest.m_RewardItem[3].m_nConsITCnt > 0)
             {
                 string ID = Encoding.UTF8.GetString(Quest.m_RewardItem[3].m_strConsITCode, 0, Quest.m_RewardItem[3].m_strConsITCode.Length);
@@ -1402,7 +1432,7 @@ namespace QuestEditor_V2
             {
                 Reward_Item_3.Text = "";
             }
-            
+
             if (Quest.m_RewardItem[4].m_nConsITCnt > 0)
             {
                 string ID = Encoding.UTF8.GetString(Quest.m_RewardItem[4].m_strConsITCode, 0, Quest.m_RewardItem[4].m_strConsITCode.Length);
@@ -1426,7 +1456,7 @@ namespace QuestEditor_V2
             {
                 Reward_Item_4.Text = "";
             }
-            
+
             if (Quest.m_RewardItem[5].m_nConsITCnt > 0)
             {
                 string ID = Encoding.UTF8.GetString(Quest.m_RewardItem[5].m_strConsITCode, 0, Quest.m_RewardItem[5].m_strConsITCode.Length);
@@ -1505,101 +1535,104 @@ namespace QuestEditor_V2
             m_nStore_trade.Text = Quest.m_nStore_trade.ToString();
             m_txtQTExp.Text = helper.ByteString(Quest.m_txtQTExp);
 
-            try
-            {
-                ND_Quest_Item.Text = helper.ByteString(ND_Quests.data_0.ElementAt((int)Quest.m_dwIndex).m_str32);
-            }
-            catch
-            {
-                ND_Quest_Item.Text = "None";
-            }
-            if (ND_Quests.data_1 != null)
-            {
-                ND_Quest_Index.Text = ND_Quests.data_1.ElementAt((int)Quest.m_dwIndex).m_dwIndex.ToString();
-                Description_Box.Text = helper.ByteString(ND_Quests.data_2.ElementAt((int)Quest.m_dwIndex).desc);
+            //sometimes title doesnt update because no value exists for that index
+            string Title = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purgezero = Title.Replace("\0", string.Empty);
 
+            string[] values1 = QuestName_KV_List.GetValues(purgezero);
+            if (values1 != null)
+            {
+                this.groupBox15.Text = purgezero + " " + values1[0];
+            }
+            else
+            {
+                this.groupBox15.Text = "title unavailable - QuestNameContents.dat missing name";
             }
             //Quest_STRs
             string ID_text = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
             string purge0_text = ID_text.Replace("\0", string.Empty);
-            var testing = Quest.m_strCode;
+
             QuestBrief.Clear();
             QuestCondition.Clear();
             QuestFinish_0.Clear();
             QuestFinish_1.Clear();
             QuestSummary.Clear();
 
-            foreach (var text in QuestTextCodes)
+            if (QuestTextCodes != null)
             {
-                string ID1 = Encoding.UTF8.GetString(text.m_strCode_0, 0, text.m_strCode_0.Length);
-                string purge1 = ID1.Replace("\0", string.Empty);
-                if (purge0_text.Equals(purge1))
+                foreach (var text in QuestTextCodes)
                 {
-                    string QB0 = helper.ByteString(text.m_strQuestBriefContents_0);
-                    string QB1 = helper.ByteString(text.m_strQuestBriefContents_1);
-                    string QB2 = helper.ByteString(text.m_strQuestBriefContents_2);
-                    string QB3 = helper.ByteString(text.m_strQuestBriefContents_3);
-                    string QB4 = helper.ByteString(text.m_strQuestBriefContents_4);
-                    QuestBrief.AppendText("\r\n" + QuestBrief_KV_List.Get(QB0));
-                    QuestBrief.AppendText("\r\n" + QuestBrief_KV_List.Get(QB1));
-                    QuestBrief.AppendText("\r\n" + QuestBrief_KV_List.Get(QB2));
-                    QuestBrief.AppendText("\r\n" + QuestBrief_KV_List.Get(QB3));
-                    QuestBrief.AppendText("\r\n" + QuestBrief_KV_List.Get(QB4));
-                    QuestBrief.ScrollToCaret();
+                    string ID1 = Encoding.UTF8.GetString(text.m_strCode_0, 0, text.m_strCode_0.Length);
+                    string purge1 = ID1.Replace("\0", string.Empty);
+                    if (purge0_text.Equals(purge1))
+                    {
+                        string QB0 = helper.ByteString(text.m_strQuestBriefContents_0);
+                        string QB1 = helper.ByteString(text.m_strQuestBriefContents_1);
+                        string QB2 = helper.ByteString(text.m_strQuestBriefContents_2);
+                        string QB3 = helper.ByteString(text.m_strQuestBriefContents_3);
+                        string QB4 = helper.ByteString(text.m_strQuestBriefContents_4);
+                        QuestBrief.AppendText(QuestBrief_KV_List.Get(QB0));
+                        QuestBrief.AppendText(Environment.NewLine + QuestBrief_KV_List.Get(QB1));
+                        QuestBrief.AppendText(Environment.NewLine + QuestBrief_KV_List.Get(QB2));
+                        QuestBrief.AppendText(Environment.NewLine + QuestBrief_KV_List.Get(QB3));
+                        QuestBrief.AppendText(Environment.NewLine + QuestBrief_KV_List.Get(QB4));
+                        QuestBrief.ScrollToCaret();
 
-                    string QC0 = helper.ByteString(text.m_strQuestConditionResult_0);
-                    string QC1 = helper.ByteString(text.m_strQuestConditionResult_1);
-                    string QC2 = helper.ByteString(text.m_strQuestConditionResult_2);
-                    string QC3 = helper.ByteString(text.m_strQuestConditionResult_3);
-                    string QC4 = helper.ByteString(text.m_strQuestConditionResult_4);
-                    QuestCondition.AppendText("\r\n" + QuestCondition_KV_List.Get(QC0));
-                    QuestCondition.AppendText("\r\n" + QuestCondition_KV_List.Get(QC1));
-                    QuestCondition.AppendText("\r\n" + QuestCondition_KV_List.Get(QC2));
-                    QuestCondition.AppendText("\r\n" + QuestCondition_KV_List.Get(QC3));
-                    QuestCondition.AppendText("\r\n" + QuestCondition_KV_List.Get(QC4));
-                    QuestCondition.ScrollToCaret();
+                        string QC0 = helper.ByteString(text.m_strQuestConditionResult_0);
+                        string QC1 = helper.ByteString(text.m_strQuestConditionResult_1);
+                        string QC2 = helper.ByteString(text.m_strQuestConditionResult_2);
+                        string QC3 = helper.ByteString(text.m_strQuestConditionResult_3);
+                        string QC4 = helper.ByteString(text.m_strQuestConditionResult_4);
+                        QuestCondition.AppendText(QuestCondition_KV_List.Get(QC0));
+                        QuestCondition.AppendText(Environment.NewLine + QuestCondition_KV_List.Get(QC1));
+                        QuestCondition.AppendText(Environment.NewLine + QuestCondition_KV_List.Get(QC2));
+                        QuestCondition.AppendText(Environment.NewLine + QuestCondition_KV_List.Get(QC3));
+                        QuestCondition.AppendText(Environment.NewLine + QuestCondition_KV_List.Get(QC4));
+                        QuestCondition.ScrollToCaret();
 
-                    string QS0 = helper.ByteString(text.m_strQuestSummaryContents_0);
-                    string QS1 = helper.ByteString(text.m_strQuestSummaryContents_1);
-                    string QS2 = helper.ByteString(text.m_strQuestSummaryContents_2);
-                    string QS3 = helper.ByteString(text.m_strQuestSummaryContents_3);
-                    string QS4 = helper.ByteString(text.m_strQuestSummaryContents_4);
-                    QuestSummary.AppendText("\r\n" + QuestSummary_KV_List.Get(QS0));
-                    QuestSummary.AppendText("\r\n" + QuestSummary_KV_List.Get(QS1));
-                    QuestSummary.AppendText("\r\n" + QuestSummary_KV_List.Get(QS2));
-                    QuestSummary.AppendText("\r\n" + QuestSummary_KV_List.Get(QS3));
-                    QuestSummary.AppendText("\r\n" + QuestSummary_KV_List.Get(QS4));
-                    QuestSummary.ScrollToCaret();
+                        string QS0 = helper.ByteString(text.m_strQuestSummaryContents_0);
+                        string QS1 = helper.ByteString(text.m_strQuestSummaryContents_1);
+                        string QS2 = helper.ByteString(text.m_strQuestSummaryContents_2);
+                        string QS3 = helper.ByteString(text.m_strQuestSummaryContents_3);
+                        string QS4 = helper.ByteString(text.m_strQuestSummaryContents_4);
+                        QuestSummary.AppendText(QuestSummary_KV_List.Get(QS0));
+                        QuestSummary.AppendText(Environment.NewLine + QuestSummary_KV_List.Get(QS1));
+                        QuestSummary.AppendText(Environment.NewLine + QuestSummary_KV_List.Get(QS2));
+                        QuestSummary.AppendText(Environment.NewLine + QuestSummary_KV_List.Get(QS3));
+                        QuestSummary.AppendText(Environment.NewLine + QuestSummary_KV_List.Get(QS4));
+                        QuestSummary.ScrollToCaret();
 
-                    string QF0 = helper.ByteString(text.m_strQuestFinishContents_U0);
-                    string QF1 = helper.ByteString(text.m_strQuestFinishContents_U1);
-                    string QF2 = helper.ByteString(text.m_strQuestFinishContents_U2);
-                    string QF3 = helper.ByteString(text.m_strQuestFinishContents_U3);
-                    string QF4 = helper.ByteString(text.m_strQuestFinishContents_U4);
-                    QuestFinish_0.AppendText("\r\n" + QuestFinish_KV_List.Get(QF0));
-                    QuestFinish_0.AppendText("\r\n" + QuestFinish_KV_List.Get(QF1));
-                    QuestFinish_0.AppendText("\r\n" + QuestFinish_KV_List.Get(QF2));
-                    QuestFinish_0.AppendText("\r\n" + QuestFinish_KV_List.Get(QF3));
-                    QuestFinish_0.AppendText("\r\n" + QuestFinish_KV_List.Get(QF4));
-                    QuestFinish_0.ScrollToCaret();
+                        string QF0 = helper.ByteString(text.m_strQuestFinishContents_U0);
+                        string QF1 = helper.ByteString(text.m_strQuestFinishContents_U1);
+                        string QF2 = helper.ByteString(text.m_strQuestFinishContents_U2);
+                        string QF3 = helper.ByteString(text.m_strQuestFinishContents_U3);
+                        string QF4 = helper.ByteString(text.m_strQuestFinishContents_U4);
+                        QuestFinish_0.AppendText(QuestFinish_KV_List.Get(QF0));
+                        QuestFinish_0.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF1));
+                        QuestFinish_0.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF2));
+                        QuestFinish_0.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF3));
+                        QuestFinish_0.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF4));
+                        QuestFinish_0.ScrollToCaret();
 
-                    string QF5 = helper.ByteString(text.m_strQuestFinishContents_F0);
-                    string QF6 = helper.ByteString(text.m_strQuestFinishContents_F1);
-                    string QF7 = helper.ByteString(text.m_strQuestFinishContents_F2);
-                    string QF8 = helper.ByteString(text.m_strQuestFinishContents_F3);
-                    string QF9 = helper.ByteString(text.m_strQuestFinishContents_F4);
-                    QuestFinish_1.AppendText("\r\n" + QuestFinish_KV_List.Get(QF5));
-                    QuestFinish_1.AppendText("\r\n" + QuestFinish_KV_List.Get(QF6));
-                    QuestFinish_1.AppendText("\r\n" + QuestFinish_KV_List.Get(QF7));
-                    QuestFinish_1.AppendText("\r\n" + QuestFinish_KV_List.Get(QF8));
-                    QuestFinish_1.AppendText("\r\n" + QuestFinish_KV_List.Get(QF9));
-                    QuestFinish_1.ScrollToCaret();
+                        string QF5 = helper.ByteString(text.m_strQuestFinishContents_F0);
+                        string QF6 = helper.ByteString(text.m_strQuestFinishContents_F1);
+                        string QF7 = helper.ByteString(text.m_strQuestFinishContents_F2);
+                        string QF8 = helper.ByteString(text.m_strQuestFinishContents_F3);
+                        string QF9 = helper.ByteString(text.m_strQuestFinishContents_F4);
+                        QuestFinish_1.AppendText(QuestFinish_KV_List.Get(QF5));
+                        QuestFinish_1.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF6));
+                        QuestFinish_1.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF7));
+                        QuestFinish_1.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF8));
+                        QuestFinish_1.AppendText(Environment.NewLine + QuestFinish_KV_List.Get(QF9));
+                        QuestFinish_1.ScrollToCaret();
 
-                    return;
+                        return;
+                    }
+
                 }
+            }
 
-            }                                
-            
+
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -1617,7 +1650,7 @@ namespace QuestEditor_V2
                 string[] GetNames = Quest_KV_List.GetValues(name);
 
                 int x = Int32.Parse(GetNames[0]);
-                QuestIndex = (int)Quests[x].m_dwIndex;
+                QuestIndex = (int)QuestEdit[x].m_dwIndex;
 
                 Fill_Quest_Data();
 
@@ -1627,6 +1660,149 @@ namespace QuestEditor_V2
 
 
 
+        }
+
+        private void Save_Data_Button_Click(object sender, EventArgs e)
+        {
+
+            QuestEdit[QuestIndex].m_nLimLv = Int32.Parse(m_nLimLv.Text);
+            QuestEdit[QuestIndex].m_nQuestType = Int32.Parse(m_nQuestType.Text);
+            QuestEdit[QuestIndex].m_bQuestRepeat = Int32.Parse(m_bQuestRepeat.Text);
+            QuestEdit[QuestIndex].m_dRepeatTime = Int32.Parse(m_dRepeatTime.Text);
+            QuestEdit[QuestIndex].m_nDifficultyLevel = Int32.Parse(m_nDifficultyLevel.Text);
+            QuestEdit[QuestIndex].m_bSelectQuestMenual = Int32.Parse(m_bSelectQuestMenual.Text);
+            QuestEdit[QuestIndex].m_bCompQuestType = Int32.Parse(m_bCompQuestType.Text);
+            QuestEdit[QuestIndex].m_nMaxLevel = Int32.Parse(m_nMaxLevel.Text);
+            QuestEdit[QuestIndex].m_dConsExp = Int32.Parse(m_dConsExp.Text);
+            QuestEdit[QuestIndex].m_nConsContribution = Int32.Parse(m_nConsContribution.Text);
+            QuestEdit[QuestIndex].m_nConsDalant = Int32.Parse(m_nConsDalant.Text);
+            QuestEdit[QuestIndex].m_nConspvppoint = Int32.Parse(m_nConspvppoint.Text);
+            QuestEdit[QuestIndex].m_nConsGold = Int32.Parse(m_nConsGold.Text);
+            QuestEdit[QuestIndex].m_bSelectConsITMenual = Int32.Parse(m_bSelectConsITMenual.Text);
+            QuestEdit[QuestIndex].m_strConsSkillCode = Encoding.UTF8.GetBytes(m_strConsSkillCode.Text);
+            QuestEdit[QuestIndex].m_nConsSkillCnt = Int32.Parse(m_nConsSkillCnt.Text);
+            QuestEdit[QuestIndex].m_strConsForceCode = Encoding.UTF8.GetBytes(m_strConsForceCode.Text);
+            QuestEdit[QuestIndex].m_nConsForceCnt = Int32.Parse(m_nConsForceCnt.Text);
+            QuestEdit[QuestIndex].m_strLinkQuest_0 = Encoding.UTF8.GetBytes(m_strLinkQuest_0.Text);
+            QuestEdit[QuestIndex].m_strLinkQuest_1 = Encoding.UTF8.GetBytes(m_strLinkQuest_1.Text);
+            QuestEdit[QuestIndex].m_strLinkQuest_2 = Encoding.UTF8.GetBytes(m_strLinkQuest_2.Text);
+            QuestEdit[QuestIndex].m_strLinkQuest_3 = Encoding.UTF8.GetBytes(m_strLinkQuest_3.Text);
+            QuestEdit[QuestIndex].m_strLinkQuest_4 = Encoding.UTF8.GetBytes(m_strLinkQuest_4.Text);
+            QuestEdit[QuestIndex].m_nLinkQuestGroupID = Int32.Parse(m_nLinkQuestGroupID.Text);
+            QuestEdit[QuestIndex].m_bFailCheck = Int32.Parse(m_bFailCheck.Text);
+            QuestEdit[QuestIndex].m_strFailBriefCode = Encoding.UTF8.GetBytes(m_strFailBriefCode.Text);
+            QuestEdit[QuestIndex].m_nLinkDummyCond = Int32.Parse(m_nLinkDummyCond.Text);
+            QuestEdit[QuestIndex].m_strLinkDummyCode = Encoding.UTF8.GetBytes(m_strLinkDummyCode.Text);
+            QuestEdit[QuestIndex].m_strFailLinkQuest = Encoding.UTF8.GetBytes(m_strFailLinkQuest.Text);
+            QuestEdit[QuestIndex].m_nViewportType = Int32.Parse(m_nViewportType.Text);
+            QuestEdit[QuestIndex].m_strViewportCode = Encoding.UTF8.GetBytes(m_strFailLinkQuest.Text);
+            QuestEdit[QuestIndex].m_nStore_trade = Int32.Parse(m_nStore_trade.Text);
+            QuestEdit[QuestIndex].m_txtQTExp = Encoding.UTF8.GetBytes(m_txtQTExp.Text);
+
+
+        }
+
+        private void Action_Node_Save_Button_Click(object sender, EventArgs e)
+        {
+            QuestEdit[QuestIndex].m_ActionNode[0].m_nActType = Int32.Parse(m_nActType_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_strActSub = Encoding.UTF8.GetBytes(m_strActSub_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_strActSub2 = Encoding.UTF8.GetBytes(m_strActSub2_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_strActArea = Encoding.UTF8.GetBytes(m_strActArea_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_nReqAct = Int32.Parse(m_nReqAct_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_nSetCntPro_100 = Int32.Parse(m_nSetCntPro_100_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_strLinkQuestItem = Encoding.UTF8.GetBytes(m_strLinkQuestItem_0.Text);
+            QuestEdit[QuestIndex].m_ActionNode[0].m_nOrder = Int32.Parse(m_nOrder_0.Text);
+
+            QuestEdit[QuestIndex].m_ActionNode[1].m_nActType = Int32.Parse(m_nActType_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_strActSub = Encoding.UTF8.GetBytes(m_strActSub_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_strActSub2 = Encoding.UTF8.GetBytes(m_strActSub2_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_strActArea = Encoding.UTF8.GetBytes(m_strActArea_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_nReqAct = Int32.Parse(m_nReqAct_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_nSetCntPro_100 = Int32.Parse(m_nSetCntPro_100_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_strLinkQuestItem = Encoding.UTF8.GetBytes(m_strLinkQuestItem_1.Text);
+            QuestEdit[QuestIndex].m_ActionNode[1].m_nOrder = Int32.Parse(m_nOrder_1.Text);
+
+            QuestEdit[QuestIndex].m_ActionNode[2].m_nActType = Int32.Parse(m_nActType_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_strActSub = Encoding.UTF8.GetBytes(m_strActSub_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_strActSub2 = Encoding.UTF8.GetBytes(m_strActSub2_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_strActArea = Encoding.UTF8.GetBytes(m_strActArea_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_nReqAct = Int32.Parse(m_nReqAct_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_nSetCntPro_100 = Int32.Parse(m_nSetCntPro_100_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_strLinkQuestItem = Encoding.UTF8.GetBytes(m_strLinkQuestItem_2.Text);
+            QuestEdit[QuestIndex].m_ActionNode[2].m_nOrder = Int32.Parse(m_nOrder_2.Text);
+
+        }
+
+        private void Reward_Save_Button_Click(object sender, EventArgs e)
+        {
+            QuestEdit[QuestIndex].m_RewardItem[0].m_strConsITCode = Encoding.UTF8.GetBytes(m_strConsITCode_0.Text);
+            QuestEdit[QuestIndex].m_RewardItem[0].m_nConsITCnt = Int32.Parse(m_nConsITCnt_0.Text);
+            QuestEdit[QuestIndex].m_RewardItem[0].m_nLinkQuestIdx = Int32.Parse(m_nLinkQuestIdx_0.Text);
+
+            QuestEdit[QuestIndex].m_RewardItem[1].m_strConsITCode = Encoding.UTF8.GetBytes(m_strConsITCode_1.Text);
+            QuestEdit[QuestIndex].m_RewardItem[1].m_nConsITCnt = Int32.Parse(m_nConsITCnt_1.Text);
+            QuestEdit[QuestIndex].m_RewardItem[1].m_nLinkQuestIdx = Int32.Parse(m_nLinkQuestIdx_1.Text);
+
+            QuestEdit[QuestIndex].m_RewardItem[2].m_strConsITCode = Encoding.UTF8.GetBytes(m_strConsITCode_2.Text);
+            QuestEdit[QuestIndex].m_RewardItem[2].m_nConsITCnt = Int32.Parse(m_nConsITCnt_2.Text);
+            QuestEdit[QuestIndex].m_RewardItem[2].m_nLinkQuestIdx = Int32.Parse(m_nLinkQuestIdx_2.Text);
+
+            QuestEdit[QuestIndex].m_RewardItem[3].m_strConsITCode = Encoding.UTF8.GetBytes(m_strConsITCode_3.Text);
+            QuestEdit[QuestIndex].m_RewardItem[3].m_nConsITCnt = Int32.Parse(m_nConsITCnt_3.Text);
+            QuestEdit[QuestIndex].m_RewardItem[3].m_nLinkQuestIdx = Int32.Parse(m_nLinkQuestIdx_3.Text);
+
+            QuestEdit[QuestIndex].m_RewardItem[4].m_strConsITCode = Encoding.UTF8.GetBytes(m_strConsITCode_4.Text);
+            QuestEdit[QuestIndex].m_RewardItem[4].m_nConsITCnt = Int32.Parse(m_nConsITCnt_4.Text);
+            QuestEdit[QuestIndex].m_RewardItem[4].m_nLinkQuestIdx = Int32.Parse(m_nLinkQuestIdx_4.Text);
+
+            QuestEdit[QuestIndex].m_RewardItem[5].m_strConsITCode = Encoding.UTF8.GetBytes(m_strConsITCode_5.Text);
+            QuestEdit[QuestIndex].m_RewardItem[5].m_nConsITCnt = Int32.Parse(m_nConsITCnt_5.Text);
+            QuestEdit[QuestIndex].m_RewardItem[5].m_nLinkQuestIdx = Int32.Parse(m_nLinkQuestIdx_5.Text);
+        }
+
+        private void Reward_Mastery_Save_Button_Click(object sender, EventArgs e)
+        {
+            QuestEdit[QuestIndex].m_RewardMastery[0].m_nConsMasteryID = Int32.Parse(m_nConsMasteryID_0.Text);
+            QuestEdit[QuestIndex].m_RewardMastery[0].m_nConsMasterySubID = Int32.Parse(m_nConsMasterySubID_0.Text);
+            QuestEdit[QuestIndex].m_RewardMastery[0].m_nConsMasteryCnt = Int32.Parse(m_nConsMasteryCnt_0.Text);
+
+        }
+
+        private void Fail_Condition_Save_Button_Click(object sender, EventArgs e)
+        {
+            QuestEdit[QuestIndex].m_QuestFailCond[0].m_nFailCondition = Int32.Parse(m_nFailCondition_0.Text);
+            QuestEdit[QuestIndex].m_QuestFailCond[0].m_strFailCode = Encoding.UTF8.GetBytes(m_strFailCode_0.Text);
+
+            QuestEdit[QuestIndex].m_QuestFailCond[1].m_nFailCondition = Int32.Parse(m_nFailCondition_1.Text);
+            QuestEdit[QuestIndex].m_QuestFailCond[1].m_strFailCode = Encoding.UTF8.GetBytes(m_strFailCode_1.Text);
+
+            QuestEdit[QuestIndex].m_QuestFailCond[2].m_nFailCondition = Int32.Parse(m_nFailCondition_2.Text);
+            QuestEdit[QuestIndex].m_QuestFailCond[2].m_strFailCode = Encoding.UTF8.GetBytes(m_strFailCode_2.Text);
+        }
+
+        private void Dat_Export_Click(object sender, EventArgs e)
+        {
+            System.IO.Directory.CreateDirectory("Server_Files");
+            string fileName = OpenFile;
+            string path = Path.Combine(Environment.CurrentDirectory, @"Server_files\", fileName);
+            
+
+            using (var stream = File.Open(path, FileMode.Create))
+            {
+                using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+                {
+                    writer.Write(QuestEdit.Length);
+                    writer.Write(90);
+                    writer.Write(2408);
+                    for(int i = 0; i < QuestEdit.Length; i++)
+                    {
+                        STR.Write_Quest_Fld(writer, QuestEdit[i]);
+                    }
+               
+                }
+            }
+
+            
         }
     }
 }

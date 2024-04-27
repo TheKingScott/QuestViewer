@@ -30,6 +30,7 @@
         {
             treeView1 = new TreeView();
             groupBox15 = new GroupBox();
+            Quest_Field_Save_Button = new Button();
             m_txtQTExp = new TextBox();
             label88 = new Label();
             m_nStore_trade = new TextBox();
@@ -98,6 +99,7 @@
             label55 = new Label();
             Quest_Links = new TabControl();
             Action_Node = new TabPage();
+            Action_Node_Save_Button = new Button();
             Monster_node_2 = new Label();
             groupBox3 = new GroupBox();
             Enum_ActType_2 = new Label();
@@ -156,6 +158,7 @@
             Monster_node_0 = new Label();
             Monster_node_1 = new Label();
             Reward_Items = new TabPage();
+            Reward_Save_Button = new Button();
             Reward_Item_5 = new Label();
             Reward_Item_4 = new Label();
             Reward_Item_3 = new Label();
@@ -205,6 +208,7 @@
             label26 = new Label();
             label25 = new Label();
             Reward_Mastery = new TabPage();
+            Reward_Mastery_Save_Button = new Button();
             groupBox11 = new GroupBox();
             m_nConsMasteryCnt_1 = new TextBox();
             m_nConsMasterySubID_1 = new TextBox();
@@ -220,6 +224,7 @@
             label44 = new Label();
             label45 = new Label();
             Fail_Condition = new TabPage();
+            Fail_Condition_Save_Button = new Button();
             groupBox14 = new GroupBox();
             m_strFailCode_2 = new TextBox();
             m_nFailCondition_2 = new TextBox();
@@ -235,24 +240,18 @@
             m_nFailCondition_0 = new TextBox();
             label50 = new Label();
             label51 = new Label();
-            ND_Quest = new TabPage();
-            ND_Quest_Index = new Label();
-            label91 = new Label();
-            Description_Box = new RichTextBox();
-            label90 = new Label();
-            label89 = new Label();
-            ND_Quest_Item = new Label();
             QuestTextCode = new TabPage();
+            label95 = new Label();
+            label94 = new Label();
+            label93 = new Label();
+            label92 = new Label();
+            label60 = new Label();
             QuestSummary = new RichTextBox();
             QuestFinish_1 = new RichTextBox();
             QuestFinish_0 = new RichTextBox();
             QuestCondition = new RichTextBox();
             QuestBrief = new RichTextBox();
-            label60 = new Label();
-            label92 = new Label();
-            label93 = new Label();
-            label94 = new Label();
-            label95 = new Label();
+            Dat_Export = new Button();
             groupBox15.SuspendLayout();
             Quest_Links.SuspendLayout();
             Action_Node.SuspendLayout();
@@ -273,7 +272,6 @@
             groupBox14.SuspendLayout();
             groupBox13.SuspendLayout();
             groupBox12.SuspendLayout();
-            ND_Quest.SuspendLayout();
             QuestTextCode.SuspendLayout();
             SuspendLayout();
             // 
@@ -287,6 +285,7 @@
             // 
             // groupBox15
             // 
+            groupBox15.Controls.Add(Quest_Field_Save_Button);
             groupBox15.Controls.Add(m_txtQTExp);
             groupBox15.Controls.Add(label88);
             groupBox15.Controls.Add(m_nStore_trade);
@@ -359,6 +358,16 @@
             groupBox15.TabIndex = 7;
             groupBox15.TabStop = false;
             groupBox15.Text = "Quest Field";
+            // 
+            // Quest_Field_Save_Button
+            // 
+            Quest_Field_Save_Button.Location = new Point(454, 566);
+            Quest_Field_Save_Button.Name = "Quest_Field_Save_Button";
+            Quest_Field_Save_Button.Size = new Size(75, 23);
+            Quest_Field_Save_Button.TabIndex = 69;
+            Quest_Field_Save_Button.Text = "Save Edit";
+            Quest_Field_Save_Button.UseVisualStyleBackColor = true;
+            Quest_Field_Save_Button.Click += Save_Data_Button_Click;
             // 
             // m_txtQTExp
             // 
@@ -894,7 +903,6 @@
             Quest_Links.Controls.Add(Reward_Items);
             Quest_Links.Controls.Add(Reward_Mastery);
             Quest_Links.Controls.Add(Fail_Condition);
-            Quest_Links.Controls.Add(ND_Quest);
             Quest_Links.Controls.Add(QuestTextCode);
             Quest_Links.Location = new Point(794, 12);
             Quest_Links.Name = "Quest_Links";
@@ -904,6 +912,7 @@
             // 
             // Action_Node
             // 
+            Action_Node.Controls.Add(Action_Node_Save_Button);
             Action_Node.Controls.Add(Monster_node_2);
             Action_Node.Controls.Add(groupBox3);
             Action_Node.Controls.Add(groupBox2);
@@ -917,6 +926,16 @@
             Action_Node.TabIndex = 0;
             Action_Node.Text = "Action_Node";
             Action_Node.UseVisualStyleBackColor = true;
+            // 
+            // Action_Node_Save_Button
+            // 
+            Action_Node_Save_Button.Location = new Point(404, 527);
+            Action_Node_Save_Button.Name = "Action_Node_Save_Button";
+            Action_Node_Save_Button.Size = new Size(75, 23);
+            Action_Node_Save_Button.TabIndex = 70;
+            Action_Node_Save_Button.Text = "Save Edit";
+            Action_Node_Save_Button.UseVisualStyleBackColor = true;
+            Action_Node_Save_Button.Click += Action_Node_Save_Button_Click;
             // 
             // Monster_node_2
             // 
@@ -1436,6 +1455,7 @@
             // 
             // Reward_Items
             // 
+            Reward_Items.Controls.Add(Reward_Save_Button);
             Reward_Items.Controls.Add(Reward_Item_5);
             Reward_Items.Controls.Add(Reward_Item_4);
             Reward_Items.Controls.Add(Reward_Item_3);
@@ -1455,6 +1475,16 @@
             Reward_Items.TabIndex = 1;
             Reward_Items.Text = "Reward_Items";
             Reward_Items.UseVisualStyleBackColor = true;
+            // 
+            // Reward_Save_Button
+            // 
+            Reward_Save_Button.Location = new Point(420, 528);
+            Reward_Save_Button.Name = "Reward_Save_Button";
+            Reward_Save_Button.Size = new Size(75, 23);
+            Reward_Save_Button.TabIndex = 70;
+            Reward_Save_Button.Text = "Save Edit";
+            Reward_Save_Button.UseVisualStyleBackColor = true;
+            Reward_Save_Button.Click += Reward_Save_Button_Click;
             // 
             // Reward_Item_5
             // 
@@ -1890,6 +1920,7 @@
             // 
             // Reward_Mastery
             // 
+            Reward_Mastery.Controls.Add(Reward_Mastery_Save_Button);
             Reward_Mastery.Controls.Add(groupBox11);
             Reward_Mastery.Controls.Add(groupBox10);
             Reward_Mastery.Location = new Point(4, 24);
@@ -1898,6 +1929,16 @@
             Reward_Mastery.TabIndex = 2;
             Reward_Mastery.Text = "Reward_Mastery";
             Reward_Mastery.UseVisualStyleBackColor = true;
+            // 
+            // Reward_Mastery_Save_Button
+            // 
+            Reward_Mastery_Save_Button.Location = new Point(424, 515);
+            Reward_Mastery_Save_Button.Name = "Reward_Mastery_Save_Button";
+            Reward_Mastery_Save_Button.Size = new Size(75, 23);
+            Reward_Mastery_Save_Button.TabIndex = 70;
+            Reward_Mastery_Save_Button.Text = "Save Edit";
+            Reward_Mastery_Save_Button.UseVisualStyleBackColor = true;
+            Reward_Mastery_Save_Button.Click += Reward_Mastery_Save_Button_Click;
             // 
             // groupBox11
             // 
@@ -2027,6 +2068,7 @@
             // 
             // Fail_Condition
             // 
+            Fail_Condition.Controls.Add(Fail_Condition_Save_Button);
             Fail_Condition.Controls.Add(groupBox14);
             Fail_Condition.Controls.Add(groupBox13);
             Fail_Condition.Controls.Add(groupBox12);
@@ -2036,6 +2078,16 @@
             Fail_Condition.TabIndex = 3;
             Fail_Condition.Text = "Fail_Condition";
             Fail_Condition.UseVisualStyleBackColor = true;
+            // 
+            // Fail_Condition_Save_Button
+            // 
+            Fail_Condition_Save_Button.Location = new Point(422, 515);
+            Fail_Condition_Save_Button.Name = "Fail_Condition_Save_Button";
+            Fail_Condition_Save_Button.Size = new Size(75, 23);
+            Fail_Condition_Save_Button.TabIndex = 70;
+            Fail_Condition_Save_Button.Text = "Save Edit";
+            Fail_Condition_Save_Button.UseVisualStyleBackColor = true;
+            Fail_Condition_Save_Button.Click += Fail_Condition_Save_Button_Click;
             // 
             // groupBox14
             // 
@@ -2172,74 +2224,6 @@
             label51.TabIndex = 0;
             label51.Text = "m_nFailCondition";
             // 
-            // ND_Quest
-            // 
-            ND_Quest.Controls.Add(ND_Quest_Index);
-            ND_Quest.Controls.Add(label91);
-            ND_Quest.Controls.Add(Description_Box);
-            ND_Quest.Controls.Add(label90);
-            ND_Quest.Controls.Add(label89);
-            ND_Quest.Controls.Add(ND_Quest_Item);
-            ND_Quest.Location = new Point(4, 24);
-            ND_Quest.Name = "ND_Quest";
-            ND_Quest.Size = new Size(529, 570);
-            ND_Quest.TabIndex = 4;
-            ND_Quest.Text = "ND_Quest";
-            ND_Quest.UseVisualStyleBackColor = true;
-            // 
-            // ND_Quest_Index
-            // 
-            ND_Quest_Index.AutoSize = true;
-            ND_Quest_Index.Location = new Point(134, 19);
-            ND_Quest_Index.Name = "ND_Quest_Index";
-            ND_Quest_Index.Size = new Size(36, 15);
-            ND_Quest_Index.TabIndex = 6;
-            ND_Quest_Index.Text = "Index";
-            // 
-            // label91
-            // 
-            label91.AutoSize = true;
-            label91.Location = new Point(22, 39);
-            label91.Name = "label91";
-            label91.Size = new Size(65, 15);
-            label91.TabIndex = 5;
-            label91.Text = "Quest Item";
-            // 
-            // Description_Box
-            // 
-            Description_Box.Location = new Point(26, 91);
-            Description_Box.Name = "Description_Box";
-            Description_Box.Size = new Size(303, 259);
-            Description_Box.TabIndex = 4;
-            Description_Box.Text = "";
-            // 
-            // label90
-            // 
-            label90.AutoSize = true;
-            label90.Location = new Point(22, 19);
-            label90.Name = "label90";
-            label90.Size = new Size(94, 15);
-            label90.TabIndex = 3;
-            label90.Text = "ND_Quest_index";
-            // 
-            // label89
-            // 
-            label89.AutoSize = true;
-            label89.Location = new Point(22, 63);
-            label89.Name = "label89";
-            label89.Size = new Size(67, 15);
-            label89.TabIndex = 2;
-            label89.Text = "Description";
-            // 
-            // ND_Quest_Item
-            // 
-            ND_Quest_Item.AutoSize = true;
-            ND_Quest_Item.Location = new Point(134, 39);
-            ND_Quest_Item.Name = "ND_Quest_Item";
-            ND_Quest_Item.Size = new Size(31, 15);
-            ND_Quest_Item.TabIndex = 0;
-            ND_Quest_Item.Text = "Item";
-            // 
             // QuestTextCode
             // 
             QuestTextCode.Controls.Add(label95);
@@ -2259,6 +2243,51 @@
             QuestTextCode.TabIndex = 5;
             QuestTextCode.Text = "QuestTextCode";
             QuestTextCode.UseVisualStyleBackColor = true;
+            // 
+            // label95
+            // 
+            label95.AutoSize = true;
+            label95.Location = new Point(31, 348);
+            label95.Name = "label95";
+            label95.Size = new Size(89, 15);
+            label95.TabIndex = 9;
+            label95.Text = "QuestSummary";
+            // 
+            // label94
+            // 
+            label94.AutoSize = true;
+            label94.Location = new Point(295, 182);
+            label94.Name = "label94";
+            label94.Size = new Size(80, 15);
+            label94.TabIndex = 8;
+            label94.Text = "QuestFinish_1";
+            // 
+            // label93
+            // 
+            label93.AutoSize = true;
+            label93.Location = new Point(31, 180);
+            label93.Name = "label93";
+            label93.Size = new Size(80, 15);
+            label93.TabIndex = 7;
+            label93.Text = "QuestFinish_0";
+            // 
+            // label92
+            // 
+            label92.AutoSize = true;
+            label92.Location = new Point(284, 14);
+            label92.Name = "label92";
+            label92.Size = new Size(91, 15);
+            label92.TabIndex = 6;
+            label92.Text = "QuestCondition";
+            // 
+            // label60
+            // 
+            label60.AutoSize = true;
+            label60.Location = new Point(38, 14);
+            label60.Name = "label60";
+            label60.Size = new Size(62, 15);
+            label60.TabIndex = 5;
+            label60.Text = "QuestBrief";
             // 
             // QuestSummary
             // 
@@ -2300,56 +2329,22 @@
             QuestBrief.TabIndex = 0;
             QuestBrief.Text = "";
             // 
-            // label60
+            // Dat_Export
             // 
-            label60.AutoSize = true;
-            label60.Location = new Point(38, 14);
-            label60.Name = "label60";
-            label60.Size = new Size(62, 15);
-            label60.TabIndex = 5;
-            label60.Text = "QuestBrief";
-            // 
-            // label92
-            // 
-            label92.AutoSize = true;
-            label92.Location = new Point(284, 14);
-            label92.Name = "label92";
-            label92.Size = new Size(91, 15);
-            label92.TabIndex = 6;
-            label92.Text = "QuestCondition";
-            // 
-            // label93
-            // 
-            label93.AutoSize = true;
-            label93.Location = new Point(31, 180);
-            label93.Name = "label93";
-            label93.Size = new Size(80, 15);
-            label93.TabIndex = 7;
-            label93.Text = "QuestFinish_0";
-            // 
-            // label94
-            // 
-            label94.AutoSize = true;
-            label94.Location = new Point(295, 182);
-            label94.Name = "label94";
-            label94.Size = new Size(80, 15);
-            label94.TabIndex = 8;
-            label94.Text = "QuestFinish_1";
-            // 
-            // label95
-            // 
-            label95.AutoSize = true;
-            label95.Location = new Point(31, 348);
-            label95.Name = "label95";
-            label95.Size = new Size(89, 15);
-            label95.TabIndex = 9;
-            label95.Text = "QuestSummary";
+            Dat_Export.Location = new Point(43, 8);
+            Dat_Export.Name = "Dat_Export";
+            Dat_Export.Size = new Size(117, 23);
+            Dat_Export.TabIndex = 9;
+            Dat_Export.Text = "Export To .dat";
+            Dat_Export.UseVisualStyleBackColor = true;
+            Dat_Export.Click += Dat_Export_Click;
             // 
             // _Quest_fld
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1346, 634);
+            Controls.Add(Dat_Export);
             Controls.Add(Quest_Links);
             Controls.Add(groupBox15);
             Controls.Add(treeView1);
@@ -2392,8 +2387,6 @@
             groupBox13.PerformLayout();
             groupBox12.ResumeLayout(false);
             groupBox12.PerformLayout();
-            ND_Quest.ResumeLayout(false);
-            ND_Quest.PerformLayout();
             QuestTextCode.ResumeLayout(false);
             QuestTextCode.PerformLayout();
             ResumeLayout(false);
@@ -2602,13 +2595,6 @@
         private TextBox m_nFailCondition_0;
         private Label label50;
         private Label label51;
-        private TabPage ND_Quest;
-        private Label ND_Quest_Index;
-        private Label label91;
-        private RichTextBox Description_Box;
-        private Label label90;
-        private Label label89;
-        private Label ND_Quest_Item;
         private Label Reward_Item_0;
         private Label Reward_Item_5;
         private Label Reward_Item_4;
@@ -2626,5 +2612,11 @@
         private Label label60;
         private Label label95;
         private Label label94;
+        private Button Quest_Field_Save_Button;
+        private Button Action_Node_Save_Button;
+        private Button Reward_Save_Button;
+        private Button Reward_Mastery_Save_Button;
+        private Button Fail_Condition_Save_Button;
+        private Button Dat_Export;
     }
 }

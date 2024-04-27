@@ -9,7 +9,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace QuestEditor_V2
 {
-    internal class Structure
+    public class Structure
     {
         public struct _action_node
         {
@@ -52,7 +52,7 @@ namespace QuestEditor_V2
             public int m_n2;
             public int m_bSelectQuestMenual;
             public int m_bCompQuestType;
-            public List<_action_node> m_ActionNode;//3
+            public _action_node[] m_ActionNode { get; set; }//3
             public int m_nMaxLevel;
             public double m_dConsExp; //8 bits
             public int m_nConsContribution;
@@ -60,8 +60,8 @@ namespace QuestEditor_V2
             public int m_nConspvppoint;
             public int m_nConsGold;
             public int m_bSelectConsITMenual;
-            public List<_quest_reward_item> m_RewardItem;//6
-            public List<_quest_reward_mastery> m_RewardMastery;//2          
+            public _quest_reward_item[] m_RewardItem { get; set; }//6
+            public _quest_reward_mastery[] m_RewardMastery { get; set; }//2          
             public byte[] m_strConsSkillCode;//64
             public int m_nConsSkillCnt;
             public byte[] m_strConsForceCode;//64
@@ -73,7 +73,7 @@ namespace QuestEditor_V2
             public byte[] m_strLinkQuest_4;//64
             public int m_nLinkQuestGroupID;
             public int m_bFailCheck;
-            public List<_quest_fail_condition> m_QuestFailCond;//3
+            public _quest_fail_condition[] m_QuestFailCond { get; set; }//3
             public byte[] m_strFailBriefCode;//64
             public int m_nLinkDummyCond;
             public byte[] m_strLinkDummyCode;//64
@@ -97,6 +97,18 @@ namespace QuestEditor_V2
             return header;
         }
 
+        public void Write_Action_Node(BinaryWriter Bin, _action_node node)
+        {
+           Bin.Write(node.m_nActType);
+           Bin.Write(node.m_strActSub);
+           Bin.Write(node.m_strActSub2);
+           Bin.Write(node.m_strActArea);
+           Bin.Write(node.m_nReqAct);
+           Bin.Write(node.m_nSetCntPro_100);
+           Bin.Write(node.m_strLinkQuestItem);
+           Bin.Write(node.m_nOrder);
+        }
+
         public _quest_reward_item Read_Quest_Reward_Item(BinaryReader Bin)
         {
             _quest_reward_item header = new _quest_reward_item();
@@ -104,6 +116,13 @@ namespace QuestEditor_V2
             header.m_nConsITCnt = Bin.ReadInt32();
             header.m_nLinkQuestIdx = Bin.ReadInt32();
             return header;
+        }
+
+        public void Write_Quest_Reward_Item(BinaryWriter Bin, _quest_reward_item item)
+        {
+            Bin.Write(item.m_strConsITCode);
+            Bin.Write(item.m_nConsITCnt);
+            Bin.Write(item.m_nLinkQuestIdx);
         }
 
         public _quest_reward_mastery Read_Quest_Reward_Mastery(BinaryReader Bin)
@@ -115,6 +134,13 @@ namespace QuestEditor_V2
             return header;
         }
 
+        public void Write_Quest_Reward_Mastery(BinaryWriter Bin, _quest_reward_mastery mastery)
+        {
+            Bin.Write(mastery.m_nConsMasteryID);
+            Bin.Write(mastery.m_nConsMasterySubID);
+            Bin.Write(mastery.m_nConsMasteryCnt);
+        }
+
         public _quest_fail_condition Read_Quest_Fail_Condition(BinaryReader Bin)
         {
             _quest_fail_condition header = new _quest_fail_condition();
@@ -124,6 +150,11 @@ namespace QuestEditor_V2
             return header;
         }
 
+        public void Write_Quest_Fail_Condition(BinaryWriter Bin, _quest_fail_condition condition)
+        {
+            Bin.Write(condition.m_nFailCondition);
+            Bin.Write(condition.m_strFailCode);
+        }
         public _Quest_fld Read_Quest_Fld(BinaryReader Bin)
         {
             _Quest_fld header = new _Quest_fld();
@@ -138,8 +169,10 @@ namespace QuestEditor_V2
             header.m_bSelectQuestMenual = Bin.ReadInt32();
             header.m_bCompQuestType = Bin.ReadInt32();
             //setup list
-            header.m_ActionNode = new List<_action_node> { Read_Action_Node(Bin), Read_Action_Node(Bin), Read_Action_Node(Bin) };
-
+            header.m_ActionNode = new _action_node[3];
+            header.m_ActionNode[0] = Read_Action_Node(Bin);
+            header.m_ActionNode[1] = Read_Action_Node(Bin);
+            header.m_ActionNode[2] = Read_Action_Node(Bin);
 
             header.m_nMaxLevel = Bin.ReadInt32();
             header.m_dConsExp = Bin.ReadDouble(); //8 bits
@@ -148,8 +181,16 @@ namespace QuestEditor_V2
             header.m_nConspvppoint = Bin.ReadInt32();
             header.m_nConsGold = Bin.ReadInt32();
             header.m_bSelectConsITMenual = Bin.ReadInt32();
-            header.m_RewardItem = new List<_quest_reward_item> { Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin), Read_Quest_Reward_Item(Bin) };//6         
-            header.m_RewardMastery = new List<_quest_reward_mastery> { Read_Quest_Reward_Mastery(Bin), Read_Quest_Reward_Mastery(Bin) };//2        
+            header.m_RewardItem = new _quest_reward_item[6];
+            header.m_RewardItem[0] = Read_Quest_Reward_Item(Bin);
+            header.m_RewardItem[1] = Read_Quest_Reward_Item(Bin);
+            header.m_RewardItem[2] = Read_Quest_Reward_Item(Bin);
+            header.m_RewardItem[3] = Read_Quest_Reward_Item(Bin);
+            header.m_RewardItem[4] = Read_Quest_Reward_Item(Bin);
+            header.m_RewardItem[5] = Read_Quest_Reward_Item(Bin);
+            header.m_RewardMastery = new _quest_reward_mastery[2];
+            header.m_RewardMastery[0] = Read_Quest_Reward_Mastery(Bin);
+            header.m_RewardMastery[1] = Read_Quest_Reward_Mastery(Bin);      
             header.m_strConsSkillCode = Bin.ReadBytes(64);//64
             header.m_nConsSkillCnt = Bin.ReadInt32();
             header.m_strConsForceCode = Bin.ReadBytes(64);//64
@@ -161,7 +202,11 @@ namespace QuestEditor_V2
             header.m_strLinkQuest_4 = Bin.ReadBytes(64);//64
             header.m_nLinkQuestGroupID = Bin.ReadInt32();
             header.m_bFailCheck = Bin.ReadInt32();
-            header.m_QuestFailCond = new List<_quest_fail_condition> { Read_Quest_Fail_Condition(Bin), Read_Quest_Fail_Condition(Bin), Read_Quest_Fail_Condition(Bin) };//3        
+            header.m_QuestFailCond = new _quest_fail_condition[3];
+            header.m_QuestFailCond[0] = Read_Quest_Fail_Condition(Bin);
+            header.m_QuestFailCond[1] = Read_Quest_Fail_Condition(Bin);
+            header.m_QuestFailCond[2] = Read_Quest_Fail_Condition(Bin);      
+            
             header.m_strFailBriefCode = Bin.ReadBytes(64);//64
             header.m_nLinkDummyCond = Bin.ReadInt32();
             header.m_strLinkDummyCode = Bin.ReadBytes(64);//64
@@ -174,6 +219,66 @@ namespace QuestEditor_V2
             return header;
         }
 
+        public void Write_Quest_Fld(BinaryWriter Bin, _Quest_fld Quest)
+        {
+           Bin.Write(Quest.m_dwIndex);
+           Bin.Write(Quest.m_strCode);
+           Bin.Write(Quest.m_nLimLv);
+           Bin.Write(Quest.m_nQuestType);
+           Bin.Write(Quest.m_bQuestRepeat);
+           Bin.Write(Quest.m_dRepeatTime); //8 bits
+           Bin.Write(Quest.m_nDifficultyLevel);
+           Bin.Write(Quest.m_n2);
+           Bin.Write(Quest.m_bSelectQuestMenual);
+           Bin.Write(Quest.m_bCompQuestType);
+
+           Write_Action_Node(Bin, Quest.m_ActionNode[0]);
+           Write_Action_Node(Bin, Quest.m_ActionNode[1]);
+           Write_Action_Node(Bin, Quest.m_ActionNode[2]);         
+           
+           Bin.Write(Quest.m_nMaxLevel);
+           Bin.Write(Quest.m_dConsExp); //8 bits
+           Bin.Write(Quest.m_nConsContribution);
+           Bin.Write(Quest.m_nConsDalant);
+           Bin.Write(Quest.m_nConspvppoint);
+           Bin.Write(Quest.m_nConsGold);
+           Bin.Write(Quest.m_bSelectConsITMenual);
+
+           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[0]);
+           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[1]);
+           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[2]);
+           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[3]);
+           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[4]);
+           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[5]);
+
+           Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[0]);
+           Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[1]);
+            
+           Bin.Write(Quest.m_strConsSkillCode);//64
+           Bin.Write(Quest.m_nConsSkillCnt);
+           Bin.Write(Quest.m_strConsForceCode);//64
+           Bin.Write(Quest.m_nConsForceCnt);
+           Bin.Write(Quest.m_strLinkQuest_0);//64
+           Bin.Write(Quest.m_strLinkQuest_1);//64
+           Bin.Write(Quest.m_strLinkQuest_2);//64
+           Bin.Write(Quest.m_strLinkQuest_3);//64
+           Bin.Write(Quest.m_strLinkQuest_4);//64
+           Bin.Write(Quest.m_nLinkQuestGroupID);
+           Bin.Write(Quest.m_bFailCheck);
+
+           Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[0]);
+           Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[1]);
+           Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[2]);
+
+           Bin.Write(Quest.m_strFailBriefCode);//64
+           Bin.Write(Quest.m_nLinkDummyCond);
+           Bin.Write(Quest.m_strLinkDummyCode);//64
+           Bin.Write(Quest.m_strFailLinkQuest);//64
+           Bin.Write(Quest.m_nViewportType);
+           Bin.Write(Quest.m_strViewportCode);//64
+           Bin.Write(Quest.m_nStore_trade);
+           Bin.Write(Quest.m_txtQTExp);
+        }
         public string _Action_Node_m_nActTypes(int mActType)
         {
             string value = "Null";
