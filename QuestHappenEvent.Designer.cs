@@ -192,6 +192,8 @@
             label78 = new Label();
             label79 = new Label();
             toolTip1 = new ToolTip(components);
+            Save_Edit_Button = new Button();
+            Dat_Export = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -1565,11 +1567,33 @@
             label79.TabIndex = 0;
             label79.Text = "m_bUse";
             // 
+            // Save_Edit_Button
+            // 
+            Save_Edit_Button.Location = new Point(604, 462);
+            Save_Edit_Button.Name = "Save_Edit_Button";
+            Save_Edit_Button.Size = new Size(75, 23);
+            Save_Edit_Button.TabIndex = 84;
+            Save_Edit_Button.Text = "Save Edit";
+            Save_Edit_Button.UseVisualStyleBackColor = true;
+            Save_Edit_Button.Click += Save_Edit_Button_Click;
+            // 
+            // Dat_Export
+            // 
+            Dat_Export.Location = new Point(12, 9);
+            Dat_Export.Name = "Dat_Export";
+            Dat_Export.Size = new Size(115, 23);
+            Dat_Export.TabIndex = 85;
+            Dat_Export.Text = "Export to .dat";
+            Dat_Export.UseVisualStyleBackColor = true;
+            Dat_Export.Click += Dat_Export_Click;
+            // 
             // QuestHappenEvent
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1447, 775);
+            Controls.Add(Dat_Export);
+            Controls.Add(Save_Edit_Button);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -1843,5 +1867,7 @@
         private Label label78;
         private Label label79;
         private ToolTip toolTip1;
+        private Button Save_Edit_Button;
+        private Button Dat_Export;
     }
 }

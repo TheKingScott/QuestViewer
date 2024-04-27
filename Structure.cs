@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static QuestEditor_V2.Structure;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -99,13 +100,14 @@ namespace QuestEditor_V2
 
         public void Write_Action_Node(BinaryWriter Bin, _action_node node)
         {
-           Bin.Write(node.m_nActType);
-           Bin.Write(node.m_strActSub);
-           Bin.Write(node.m_strActSub2);
-           Bin.Write(node.m_strActArea);
+            Helpers helper = new Helpers();
+            Bin.Write(node.m_nActType);
+           Bin.Write(helper.ByteExpand64(node.m_strActSub));
+           Bin.Write(helper.ByteExpand64(node.m_strActSub2));
+           Bin.Write(helper.ByteExpand64(node.m_strActArea));
            Bin.Write(node.m_nReqAct);
            Bin.Write(node.m_nSetCntPro_100);
-           Bin.Write(node.m_strLinkQuestItem);
+           Bin.Write(helper.ByteExpand64(node.m_strLinkQuestItem));
            Bin.Write(node.m_nOrder);
         }
 
@@ -120,7 +122,8 @@ namespace QuestEditor_V2
 
         public void Write_Quest_Reward_Item(BinaryWriter Bin, _quest_reward_item item)
         {
-            Bin.Write(item.m_strConsITCode);
+            Helpers helper = new Helpers();
+            Bin.Write(helper.ByteExpand64(item.m_strConsITCode));
             Bin.Write(item.m_nConsITCnt);
             Bin.Write(item.m_nLinkQuestIdx);
         }
@@ -152,8 +155,9 @@ namespace QuestEditor_V2
 
         public void Write_Quest_Fail_Condition(BinaryWriter Bin, _quest_fail_condition condition)
         {
+            Helpers helper = new Helpers();
             Bin.Write(condition.m_nFailCondition);
-            Bin.Write(condition.m_strFailCode);
+            Bin.Write(helper.ByteExpand64(condition.m_strFailCode));
         }
         public _Quest_fld Read_Quest_Fld(BinaryReader Bin)
         {
@@ -221,8 +225,9 @@ namespace QuestEditor_V2
 
         public void Write_Quest_Fld(BinaryWriter Bin, _Quest_fld Quest)
         {
+            Helpers helper = new Helpers();
            Bin.Write(Quest.m_dwIndex);
-           Bin.Write(Quest.m_strCode);
+           Bin.Write(helper.ByteExpand64(Quest.m_strCode));
            Bin.Write(Quest.m_nLimLv);
            Bin.Write(Quest.m_nQuestType);
            Bin.Write(Quest.m_bQuestRepeat);
@@ -254,15 +259,15 @@ namespace QuestEditor_V2
            Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[0]);
            Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[1]);
             
-           Bin.Write(Quest.m_strConsSkillCode);//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strConsSkillCode));//64
            Bin.Write(Quest.m_nConsSkillCnt);
-           Bin.Write(Quest.m_strConsForceCode);//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strConsForceCode));//64
            Bin.Write(Quest.m_nConsForceCnt);
-           Bin.Write(Quest.m_strLinkQuest_0);//64
-           Bin.Write(Quest.m_strLinkQuest_1);//64
-           Bin.Write(Quest.m_strLinkQuest_2);//64
-           Bin.Write(Quest.m_strLinkQuest_3);//64
-           Bin.Write(Quest.m_strLinkQuest_4);//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_0));//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_1));//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_2));//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_3));//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_4));//64
            Bin.Write(Quest.m_nLinkQuestGroupID);
            Bin.Write(Quest.m_bFailCheck);
 
@@ -270,14 +275,14 @@ namespace QuestEditor_V2
            Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[1]);
            Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[2]);
 
-           Bin.Write(Quest.m_strFailBriefCode);//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strFailBriefCode));//64
            Bin.Write(Quest.m_nLinkDummyCond);
-           Bin.Write(Quest.m_strLinkDummyCode);//64
-           Bin.Write(Quest.m_strFailLinkQuest);//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strLinkDummyCode));//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strFailLinkQuest));//64
            Bin.Write(Quest.m_nViewportType);
-           Bin.Write(Quest.m_strViewportCode);//64
+           Bin.Write(helper.ByteExpand64(Quest.m_strViewportCode));//64
            Bin.Write(Quest.m_nStore_trade);
-           Bin.Write(Quest.m_txtQTExp);
+           Bin.Write(helper.ByteExpand64(Quest.m_txtQTExp));
         }
         public string _Action_Node_m_nActTypes(int mActType)
         {
@@ -468,6 +473,15 @@ namespace QuestEditor_V2
             return item;
         }
 
+        public void Write__happen_event_condition_node(BinaryWriter Bin, _happen_event_condition_node node)
+        {
+            Helpers helper = new Helpers();
+            Bin.Write(node.m_nCondType);
+            Bin.Write(node.m_nCondSubType);
+            Bin.Write(helper.ByteExpand64(node.m_sCondVal));
+        }
+
+
         public struct _happen_event_node
         {
             public int m_bUse;
@@ -476,13 +490,35 @@ namespace QuestEditor_V2
             public int m_bSelectQuestManual;
             public int m_nAcepProNum;
             public int m_nAcepProDen;
-            public List<_happen_event_condition_node> m_CondNode;//5
+            public _happen_event_condition_node[] m_CondNode;//5
             public byte[] m_strLinkQuest_0;//64
             public byte[] m_strLinkQuest_1;//64
             public byte[] m_strLinkQuest_2;//64
             public byte[] m_strLinkQuest_3;//64
             public byte[] m_strLinkQuest_4;//64
         };
+
+        public void Write_happen_event_node(BinaryWriter Bin, _happen_event_node node)
+        {
+            Helpers helper = new Helpers();
+            Bin.Write(node.m_bUse);
+            Bin.Write(node.m_bQuestRepeat);
+            Bin.Write(node.m_nQuestType);
+            Bin.Write(node.m_bSelectQuestManual);
+            Bin.Write(node.m_nAcepProNum);
+            Bin.Write(node.m_nAcepProDen);
+            Write__happen_event_condition_node(Bin, node.m_CondNode[0]);
+            Write__happen_event_condition_node(Bin, node.m_CondNode[1]);
+            Write__happen_event_condition_node(Bin, node.m_CondNode[2]);
+            Write__happen_event_condition_node(Bin, node.m_CondNode[3]);
+            Write__happen_event_condition_node(Bin, node.m_CondNode[4]);
+            Bin.Write(helper.ByteExpand64(node.m_strLinkQuest_0));
+            Bin.Write(helper.ByteExpand64(node.m_strLinkQuest_1));
+            Bin.Write(helper.ByteExpand64(node.m_strLinkQuest_2));
+            Bin.Write(helper.ByteExpand64(node.m_strLinkQuest_3));
+            Bin.Write(helper.ByteExpand64(node.m_strLinkQuest_4));
+
+        }
 
         public _happen_event_node Read_happen_event_node(BinaryReader Bin)
         {
@@ -493,7 +529,14 @@ namespace QuestEditor_V2
             item.m_bSelectQuestManual = Bin.ReadInt32();
             item.m_nAcepProNum = Bin.ReadInt32();
             item.m_nAcepProDen = Bin.ReadInt32();
-            item.m_CondNode = new List<_happen_event_condition_node> { Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin), Read_happen_event_condition_node(Bin) };
+            item.m_CondNode = new _happen_event_condition_node[5];
+
+            item.m_CondNode[0] = Read_happen_event_condition_node(Bin);
+            item.m_CondNode[1] = Read_happen_event_condition_node(Bin);
+            item.m_CondNode[2] = Read_happen_event_condition_node(Bin);
+            item.m_CondNode[3] = Read_happen_event_condition_node(Bin);
+            item.m_CondNode[4] = Read_happen_event_condition_node(Bin);
+            
             item.m_strLinkQuest_0 = Bin.ReadBytes(64);
             item.m_strLinkQuest_1 = Bin.ReadBytes(64);
             item.m_strLinkQuest_2 = Bin.ReadBytes(64);
@@ -502,13 +545,24 @@ namespace QuestEditor_V2
             return item;
         }
 
+        public void Write__QuestHappenEvent_fld(BinaryWriter Bin, _QuestHappenEvent_fld Quest)
+        {
+            Helpers helper = new Helpers();
+            Bin.Write(Quest.m_dwIndex);
+            Bin.Write(helper.ByteExpand64(Quest.m_strCode));
+            Bin.Write(Quest.m_nEevntNo);
+            Write_happen_event_node(Bin, Quest.m_Node[0]);
+            Write_happen_event_node(Bin, Quest.m_Node[1]);
+            Write_happen_event_node(Bin, Quest.m_Node[2]);
+
+        }
 
         public struct _QuestHappenEvent_fld
         {
             public uint m_dwIndex;
             public byte[] m_strCode;//64
             public int m_nEevntNo;
-            public List<_happen_event_node> m_Node;//3
+            public _happen_event_node[] m_Node;//3
         };
 
         public _QuestHappenEvent_fld Read_QuestHappenEvent_fld(BinaryReader Bin)
@@ -517,7 +571,11 @@ namespace QuestEditor_V2
             item.m_dwIndex = Bin.ReadUInt32();
             item.m_strCode = Bin.ReadBytes(64);
             item.m_nEevntNo = Bin.ReadInt32();
-            item.m_Node = new List<_happen_event_node> { Read_happen_event_node(Bin), Read_happen_event_node(Bin), Read_happen_event_node(Bin) };
+            item.m_Node = new _happen_event_node[3];
+
+            item.m_Node[0] = Read_happen_event_node(Bin);
+            item.m_Node[1] = Read_happen_event_node(Bin);
+            item.m_Node[2] = Read_happen_event_node(Bin);
             return item;
         }
 

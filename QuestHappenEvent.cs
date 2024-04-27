@@ -17,21 +17,20 @@ namespace QuestEditor_V2
     public partial class QuestHappenEvent : Form
     {
         Structure STR = new Structure();
-        List<_QuestHappenEvent_fld> Quests;
+        _QuestHappenEvent_fld[] Quests { get; set; }
         NameValueCollection Quest_KV_List = new NameValueCollection();
         int Index = 0;
+        string OpenFile;
         public QuestHappenEvent()
         {
             InitializeComponent();
-            
-            //Read_QuestHappenEvent_fld(
-            
 
         }
         public void ReadFile(string path)
         {
             Index = 0;
-            //string path = "QuestDummyEvent.dat";
+            OpenFile = path;
+            
             if (File.Exists(path))
             {
                 this.Text = path;
@@ -42,15 +41,15 @@ namespace QuestEditor_V2
                     int _columns = reader.ReadInt32();
                     int _size = reader.ReadInt32();
 
-                    Quests = new List<_QuestHappenEvent_fld>();
+                    Quests = new _QuestHappenEvent_fld[_Header];
                     for (int i = 0; i < _Header; i++)
                     {
-                        Quests.Add(STR.Read_QuestHappenEvent_fld(reader));
+                        Quests[i] = (STR.Read_QuestHappenEvent_fld(reader));
 
                     }
 
 
-                    for (int i = 0; i < Quests.Count; i++)
+                    for (int i = 0; i < Quests.Length; i++)
                     {
                         string ID = Encoding.UTF8.GetString(Quests[i].m_strCode, 0, Quests[i].m_strCode.Length);
                         //add index value to compare here                                              
@@ -239,22 +238,146 @@ namespace QuestEditor_V2
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            
+
             Quest_KV_List.Get(Index);
             string name = this.treeView1.SelectedNode.Text;
             string[] GetNames = Quest_KV_List.GetValues(name);
-           
+
             int x = Int32.Parse(GetNames[0]);
-            Index = Math.Clamp((int)Quests[x].m_dwIndex,0, Quest_KV_List.Count-1);          
-                 
-            Fill_Quest_Data();          
-            
+            Index = Math.Clamp((int)Quests[x].m_dwIndex, 0, Quest_KV_List.Count - 1);
+
+            Fill_Quest_Data();
+
         }
 
         private void m_sCondVal_20_MouseMove(object sender, MouseEventArgs e)
         {
             toolTip1.SetToolTip(m_sCondVal_20, "Race Flag BM,BF,CM,CF,AA");
-            
+
+        }
+
+        private void Save_Edit_Button_Click(object sender, EventArgs e)
+        {
+
+            Quests[Index].m_Node[0].m_bUse = Int32.Parse(m_bUse_0.Text);
+            Quests[Index].m_Node[0].m_bQuestRepeat = Int32.Parse(m_bQuestRepeat_0.Text);
+            Quests[Index].m_Node[0].m_nQuestType = Int32.Parse(m_nQuestType_0.Text);
+            Quests[Index].m_Node[0].m_bSelectQuestManual = Int32.Parse(m_bSelectQuestManual_0.Text);
+            Quests[Index].m_Node[0].m_nAcepProNum = Int32.Parse(m_nAcepProNum_0.Text);
+            Quests[Index].m_Node[0].m_nAcepProDen = Int32.Parse(m_nAcepProDen_0.Text);
+            Quests[Index].m_Node[0].m_strLinkQuest_0 = Encoding.UTF8.GetBytes(m_strLinkQuest_00.Text);
+            Quests[Index].m_Node[0].m_strLinkQuest_1 = Encoding.UTF8.GetBytes(m_strLinkQuest_10.Text);
+            Quests[Index].m_Node[0].m_strLinkQuest_2 = Encoding.UTF8.GetBytes(m_strLinkQuest_20.Text);
+            Quests[Index].m_Node[0].m_strLinkQuest_3 = Encoding.UTF8.GetBytes(m_strLinkQuest_30.Text);
+            Quests[Index].m_Node[0].m_strLinkQuest_4 = Encoding.UTF8.GetBytes(m_strLinkQuest_40.Text);
+
+            Quests[Index].m_Node[1].m_bUse = Int32.Parse(m_bUse_1.Text);
+            Quests[Index].m_Node[1].m_bQuestRepeat = Int32.Parse(m_bQuestRepeat_1.Text);
+            Quests[Index].m_Node[1].m_nQuestType = Int32.Parse(m_nQuestType_1.Text);
+            Quests[Index].m_Node[1].m_bSelectQuestManual = Int32.Parse(m_bSelectQuestManual_1.Text);
+            Quests[Index].m_Node[1].m_nAcepProNum = Int32.Parse(m_nAcepProNum_1.Text);
+            Quests[Index].m_Node[1].m_nAcepProDen = Int32.Parse(m_nAcepProDen_1.Text);
+            Quests[Index].m_Node[1].m_strLinkQuest_0 = Encoding.UTF8.GetBytes(m_strLinkQuest_01.Text);
+            Quests[Index].m_Node[1].m_strLinkQuest_1 = Encoding.UTF8.GetBytes(m_strLinkQuest_11.Text);
+            Quests[Index].m_Node[1].m_strLinkQuest_2 = Encoding.UTF8.GetBytes(m_strLinkQuest_21.Text);
+            Quests[Index].m_Node[1].m_strLinkQuest_3 = Encoding.UTF8.GetBytes(m_strLinkQuest_31.Text);
+            Quests[Index].m_Node[1].m_strLinkQuest_4 = Encoding.UTF8.GetBytes(m_strLinkQuest_41.Text);
+
+            Quests[Index].m_Node[2].m_bUse = Int32.Parse(m_bUse_2.Text);
+            Quests[Index].m_Node[2].m_bQuestRepeat = Int32.Parse(m_bQuestRepeat_2.Text);
+            Quests[Index].m_Node[2].m_nQuestType = Int32.Parse(m_nQuestType_2.Text);
+            Quests[Index].m_Node[2].m_bSelectQuestManual = Int32.Parse(m_bSelectQuestManual_2.Text);
+            Quests[Index].m_Node[2].m_nAcepProNum = Int32.Parse(m_nAcepProNum_2.Text);
+            Quests[Index].m_Node[2].m_nAcepProDen = Int32.Parse(m_nAcepProDen_2.Text);
+            Quests[Index].m_Node[2].m_strLinkQuest_0 = Encoding.UTF8.GetBytes(m_strLinkQuest_02.Text);
+            Quests[Index].m_Node[2].m_strLinkQuest_1 = Encoding.UTF8.GetBytes(m_strLinkQuest_12.Text);
+            Quests[Index].m_Node[2].m_strLinkQuest_2 = Encoding.UTF8.GetBytes(m_strLinkQuest_22.Text);
+            Quests[Index].m_Node[2].m_strLinkQuest_3 = Encoding.UTF8.GetBytes(m_strLinkQuest_32.Text);
+            Quests[Index].m_Node[2].m_strLinkQuest_4 = Encoding.UTF8.GetBytes(m_strLinkQuest_42.Text);
+
+            Quests[Index].m_Node[0].m_CondNode[0].m_nCondType = Int32.Parse(m_nCondType_00.Text);
+            Quests[Index].m_Node[0].m_CondNode[0].m_nCondSubType = Int32.Parse(m_nCondSubType_00.Text);
+            Quests[Index].m_Node[0].m_CondNode[0].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_00.Text);
+
+            Quests[Index].m_Node[0].m_CondNode[1].m_nCondType = Int32.Parse(m_nCondType_10.Text);
+            Quests[Index].m_Node[0].m_CondNode[1].m_nCondSubType = Int32.Parse(m_nCondSubType_10.Text);
+            Quests[Index].m_Node[0].m_CondNode[1].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_10.Text);
+
+            Quests[Index].m_Node[0].m_CondNode[2].m_nCondType = Int32.Parse(m_nCondType_20.Text);
+            Quests[Index].m_Node[0].m_CondNode[2].m_nCondSubType = Int32.Parse(m_nCondSubType_20.Text);
+            Quests[Index].m_Node[0].m_CondNode[2].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_20.Text);
+
+            Quests[Index].m_Node[0].m_CondNode[3].m_nCondType = Int32.Parse(m_nCondType_30.Text);
+            Quests[Index].m_Node[0].m_CondNode[3].m_nCondSubType = Int32.Parse(m_nCondSubType_30.Text);
+            Quests[Index].m_Node[0].m_CondNode[3].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_30.Text);
+
+            Quests[Index].m_Node[0].m_CondNode[4].m_nCondType = Int32.Parse(m_nCondType_40.Text);
+            Quests[Index].m_Node[0].m_CondNode[4].m_nCondSubType = Int32.Parse(m_nCondSubType_40.Text);
+            Quests[Index].m_Node[0].m_CondNode[4].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_40.Text);
+
+            Quests[Index].m_Node[1].m_CondNode[0].m_nCondType = Int32.Parse(m_nCondType_01.Text);
+            Quests[Index].m_Node[1].m_CondNode[0].m_nCondSubType = Int32.Parse(m_nCondSubType_01.Text);
+            Quests[Index].m_Node[1].m_CondNode[0].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_01.Text);
+
+            Quests[Index].m_Node[1].m_CondNode[1].m_nCondType = Int32.Parse(m_nCondType_11.Text);
+            Quests[Index].m_Node[1].m_CondNode[1].m_nCondSubType = Int32.Parse(m_nCondSubType_11.Text);
+            Quests[Index].m_Node[1].m_CondNode[1].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_11.Text);
+
+            Quests[Index].m_Node[1].m_CondNode[2].m_nCondType = Int32.Parse(m_nCondType_21.Text);
+            Quests[Index].m_Node[1].m_CondNode[2].m_nCondSubType = Int32.Parse(m_nCondSubType_21.Text);
+            Quests[Index].m_Node[1].m_CondNode[2].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_21.Text);
+
+            Quests[Index].m_Node[1].m_CondNode[3].m_nCondType = Int32.Parse(m_nCondType_31.Text);
+            Quests[Index].m_Node[1].m_CondNode[3].m_nCondSubType = Int32.Parse(m_nCondSubType_31.Text);
+            Quests[Index].m_Node[1].m_CondNode[3].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_31.Text);
+
+            Quests[Index].m_Node[1].m_CondNode[4].m_nCondType = Int32.Parse(m_nCondType_41.Text);
+            Quests[Index].m_Node[1].m_CondNode[4].m_nCondSubType = Int32.Parse(m_nCondSubType_41.Text);
+            Quests[Index].m_Node[1].m_CondNode[4].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_41.Text);
+
+            Quests[Index].m_Node[2].m_CondNode[0].m_nCondType = Int32.Parse(m_nCondType_02.Text);
+            Quests[Index].m_Node[2].m_CondNode[0].m_nCondSubType = Int32.Parse(m_nCondSubType_02.Text);
+            Quests[Index].m_Node[2].m_CondNode[0].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_02.Text);
+
+            Quests[Index].m_Node[2].m_CondNode[1].m_nCondType = Int32.Parse(m_nCondType_12.Text);
+            Quests[Index].m_Node[2].m_CondNode[1].m_nCondSubType = Int32.Parse(m_nCondSubType_12.Text);
+            Quests[Index].m_Node[2].m_CondNode[1].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_12.Text);
+
+            Quests[Index].m_Node[2].m_CondNode[2].m_nCondType = Int32.Parse(m_nCondType_22.Text);
+            Quests[Index].m_Node[2].m_CondNode[2].m_nCondSubType = Int32.Parse(m_nCondSubType_22.Text);
+            Quests[Index].m_Node[2].m_CondNode[2].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_22.Text);
+
+            Quests[Index].m_Node[2].m_CondNode[3].m_nCondType = Int32.Parse(m_nCondType_32.Text);
+            Quests[Index].m_Node[2].m_CondNode[3].m_nCondSubType = Int32.Parse(m_nCondSubType_32.Text);
+            Quests[Index].m_Node[2].m_CondNode[3].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_32.Text);
+
+            Quests[Index].m_Node[2].m_CondNode[4].m_nCondType = Int32.Parse(m_nCondType_42.Text);
+            Quests[Index].m_Node[2].m_CondNode[4].m_nCondSubType = Int32.Parse(m_nCondSubType_42.Text);
+            Quests[Index].m_Node[2].m_CondNode[4].m_sCondVal = Encoding.UTF8.GetBytes(m_sCondVal_42.Text);
+
+        }
+
+        private void Dat_Export_Click(object sender, EventArgs e)
+        {
+            System.IO.Directory.CreateDirectory("Server_Files");
+            string fileName = OpenFile;
+            string path = Path.Combine(Environment.CurrentDirectory, @"Server_files\", fileName);
+
+            using (var stream = File.Open(path, FileMode.Create))
+            {
+                using (var writer = new BinaryWriter(stream, Encoding.ASCII, false))
+                {
+                    writer.Write(Quests.Length);
+                    writer.Write(81);
+                    writer.Write(2184);
+                    for (int i = 0; i < Quests.Length; i++)
+                    {
+                        STR.Write__QuestHappenEvent_fld(writer, Quests[i]);
+                    }
+
+                }
+            }
+
         }
     }
 }
