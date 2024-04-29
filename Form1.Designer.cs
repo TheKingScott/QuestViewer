@@ -39,11 +39,15 @@
             button9 = new Button();
             button10 = new Button();
             button11 = new Button();
+            Generate_Client = new Button();
+            groupBox1 = new GroupBox();
+            groupBox2 = new GroupBox();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(35, 34);
+            button1.Location = new Point(15, 22);
             button1.Name = "button1";
             button1.Size = new Size(126, 23);
             button1.TabIndex = 0;
@@ -53,7 +57,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(176, 34);
+            button2.Location = new Point(156, 22);
             button2.Name = "button2";
             button2.Size = new Size(233, 23);
             button2.TabIndex = 1;
@@ -63,7 +67,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(415, 34);
+            button3.Location = new Point(395, 22);
             button3.Name = "button3";
             button3.Size = new Size(189, 23);
             button3.TabIndex = 2;
@@ -73,7 +77,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(35, 72);
+            button4.Location = new Point(19, 51);
             button4.Name = "button4";
             button4.Size = new Size(189, 23);
             button4.TabIndex = 3;
@@ -83,7 +87,7 @@
             // 
             // button5
             // 
-            button5.Location = new Point(240, 72);
+            button5.Location = new Point(224, 51);
             button5.Name = "button5";
             button5.Size = new Size(189, 23);
             button5.TabIndex = 4;
@@ -93,7 +97,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(435, 72);
+            button6.Location = new Point(419, 51);
             button6.Name = "button6";
             button6.Size = new Size(208, 23);
             button6.TabIndex = 5;
@@ -103,7 +107,7 @@
             // 
             // button7
             // 
-            button7.Location = new Point(35, 113);
+            button7.Location = new Point(19, 80);
             button7.Name = "button7";
             button7.Size = new Size(189, 23);
             button7.TabIndex = 6;
@@ -113,7 +117,7 @@
             // 
             // button8
             // 
-            button8.Location = new Point(240, 113);
+            button8.Location = new Point(224, 80);
             button8.Name = "button8";
             button8.Size = new Size(189, 23);
             button8.TabIndex = 7;
@@ -123,7 +127,7 @@
             // 
             // button9
             // 
-            button9.Location = new Point(435, 113);
+            button9.Location = new Point(419, 80);
             button9.Name = "button9";
             button9.Size = new Size(189, 23);
             button9.TabIndex = 8;
@@ -133,7 +137,7 @@
             // 
             // button10
             // 
-            button10.Location = new Point(35, 152);
+            button10.Location = new Point(19, 109);
             button10.Name = "button10";
             button10.Size = new Size(189, 23);
             button10.TabIndex = 9;
@@ -143,7 +147,7 @@
             // 
             // button11
             // 
-            button11.Location = new Point(240, 152);
+            button11.Location = new Point(224, 109);
             button11.Name = "button11";
             button11.Size = new Size(189, 23);
             button11.TabIndex = 10;
@@ -151,24 +155,56 @@
             button11.UseVisualStyleBackColor = true;
             button11.Click += button11_Click;
             // 
+            // Generate_Client
+            // 
+            Generate_Client.Location = new Point(668, 34);
+            Generate_Client.Name = "Generate_Client";
+            Generate_Client.Size = new Size(106, 23);
+            Generate_Client.TabIndex = 11;
+            Generate_Client.Text = "Generate_Client";
+            Generate_Client.UseVisualStyleBackColor = true;
+            Generate_Client.Click += TestValue_Click;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(button2);
+            groupBox1.Controls.Add(button1);
+            groupBox1.Controls.Add(button3);
+            groupBox1.Controls.Add(button11);
+            groupBox1.Controls.Add(button10);
+            groupBox1.Controls.Add(button6);
+            groupBox1.Controls.Add(button4);
+            groupBox1.Controls.Add(button9);
+            groupBox1.Controls.Add(button8);
+            groupBox1.Controls.Add(button5);
+            groupBox1.Controls.Add(button7);
+            groupBox1.Location = new Point(12, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(633, 151);
+            groupBox1.TabIndex = 13;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Server_Files";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Location = new Point(12, 169);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(633, 129);
+            groupBox2.TabIndex = 14;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Client Files";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(button11);
-            Controls.Add(button10);
-            Controls.Add(button9);
-            Controls.Add(button8);
-            Controls.Add(button7);
-            Controls.Add(button6);
-            Controls.Add(button5);
-            Controls.Add(button4);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
+            Controls.Add(Generate_Client);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Quest Viewer";
+            groupBox1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -185,5 +221,8 @@
         private Button button9;
         private Button button10;
         private Button button11;
+        private Button Generate_Client;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
     }
 }

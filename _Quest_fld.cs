@@ -45,7 +45,27 @@ namespace QuestEditor_V2
 
         }
 
-        public void ReadFile(string path)
+        public Structure._Quest_fld[] ReadFile_Quest_fld(string path)
+        {
+            using (var stream = System.IO.File.OpenRead(path))
+            using (var reader = new BinaryReader(stream))
+            {
+                int _Header = reader.ReadInt32();
+                int _columns = reader.ReadInt32();
+                int _size = reader.ReadInt32();
+                QuestEdit = new Structure._Quest_fld[_Header];
+
+                for (int i = 0; i < _Header; i++)
+                {
+                    QuestEdit[i] = STR.Read_Quest_Fld(reader);
+
+                }
+               
+            }
+            return QuestEdit;
+        }
+
+            public void ReadFile(string path)
         {
             OpenFile = path;
             if (File.Exists(path))

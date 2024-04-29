@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,101 @@ namespace QuestEditor_V2
             InitializeComponent();
 
         }
-        public void ReadFile(string path)
+        public void Write_Client_QuestHappenEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
+        {
+            Helpers help = new Helpers();
+
+            Bin.Write(Quest.m_dwIndex); //0
+            string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purge0 = ID0.Replace("\0", string.Empty);
+            int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
+
+            int base10 = Convert.ToInt32(helperint); 
+            Bin.Write(base10);//4
+
+            byte m_nEevntNo = (byte)Quest.m_nEevntNo;
+            Bin.Write(m_nEevntNo); //8
+            byte zero = 0;
+            short zero1 = 0;
+            Bin.Write(zero);//9
+            Bin.Write(zero1);//10
+            for (int i = 0; i < 3; i++)
+            {
+                Bin.Write(Quest.m_Node[i].m_bUse); //12
+                Bin.Write(Quest.m_Node[i].m_nQuestType); //16
+                for (int y = 0; y < 5; y++)
+                {                   
+                    byte m_nCondType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondType;
+                    Bin.Write(m_nCondType); //20
+
+                    byte m_nCondSubType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondSubType;
+                    Bin.Write(m_nCondSubType); //21 
+                    short unknown = 0;
+                    Bin.Write(unknown); //22
+                    int m_sCondVal = help.m_sCondVal_To_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    Bin.Write(m_sCondVal); //24
+                    int unknown1 = 0;
+                    Bin.Write(unknown1);//28
+                }
+
+
+                string ID1 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_0, 0, Quest.m_Node[i].m_strLinkQuest_0.Length);
+                string purge1 = ID1.Replace("\0", string.Empty);
+                int str_0 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge1));
+
+                string ID2 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_1, 0, Quest.m_Node[i].m_strLinkQuest_1.Length);
+                string purge2 = ID2.Replace("\0", string.Empty);
+                int str_1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
+
+                string ID3 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_2, 0, Quest.m_Node[i].m_strLinkQuest_2.Length);
+                string purge3 = ID3.Replace("\0", string.Empty);
+                int str_2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge3));
+
+                string ID4 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_3, 0, Quest.m_Node[i].m_strLinkQuest_3.Length);
+                string purge4 = ID4.Replace("\0", string.Empty);
+                int str_3 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge4));
+
+                string ID5 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_4, 0, Quest.m_Node[i].m_strLinkQuest_4.Length);
+                string purge5 = ID5.Replace("\0", string.Empty);
+                int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge5));
+
+               
+                Bin.Write(str_0);//80
+                Bin.Write(str_0);
+                Bin.Write(str_1);//88
+                Bin.Write(str_1);
+                Bin.Write(str_2);//96
+                Bin.Write(str_2);
+                Bin.Write(str_3);//104
+                Bin.Write(str_3);
+                Bin.Write(str_4);//112
+                Bin.Write(str_4);
+
+            }
+
+        }
+
+        public Structure._QuestHappenEvent_fld[] ReadFile_QuestHappenEvent_fld(string path)
+        {
+            using (var stream = System.IO.File.OpenRead(path))
+            using (var reader = new BinaryReader(stream))
+            {
+                int _Header = reader.ReadInt32();
+                int _columns = reader.ReadInt32();
+                int _size = reader.ReadInt32();
+
+                Quests = new _QuestHappenEvent_fld[_Header];
+                for (int i = 0; i < _Header; i++)
+                {
+                    Quests[i] = (STR.Read_QuestHappenEvent_fld(reader));
+
+                }
+
+            }
+            return Quests;
+        }
+
+            public void ReadFile(string path)
         {
             Index = 0;
             OpenFile = path;
