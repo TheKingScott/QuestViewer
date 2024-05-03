@@ -194,6 +194,8 @@
             toolTip1 = new ToolTip(components);
             Save_Edit_Button = new Button();
             Dat_Export = new Button();
+            label80 = new Label();
+            Index_Label = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -210,7 +212,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(187, 9);
+            label1.Location = new Point(325, 13);
             label1.Name = "label1";
             label1.Size = new Size(78, 15);
             label1.TabIndex = 1;
@@ -219,7 +221,7 @@
             // m_nEevntNo
             // 
             m_nEevntNo.AutoSize = true;
-            m_nEevntNo.Location = new Point(271, 9);
+            m_nEevntNo.Location = new Point(409, 13);
             m_nEevntNo.Name = "m_nEevntNo";
             m_nEevntNo.Size = new Size(13, 15);
             m_nEevntNo.TabIndex = 2;
@@ -1587,11 +1589,31 @@
             Dat_Export.UseVisualStyleBackColor = true;
             Dat_Export.Click += Dat_Export_Click;
             // 
+            // label80
+            // 
+            label80.AutoSize = true;
+            label80.Location = new Point(187, 13);
+            label80.Name = "label80";
+            label80.Size = new Size(45, 15);
+            label80.TabIndex = 86;
+            label80.Text = "Index : ";
+            // 
+            // Index_Label
+            // 
+            Index_Label.AutoSize = true;
+            Index_Label.Location = new Point(238, 13);
+            Index_Label.Name = "Index_Label";
+            Index_Label.Size = new Size(13, 15);
+            Index_Label.TabIndex = 87;
+            Index_Label.Text = "0";
+            // 
             // QuestHappenEvent
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1447, 775);
+            Controls.Add(Index_Label);
+            Controls.Add(label80);
             Controls.Add(Dat_Export);
             Controls.Add(Save_Edit_Button);
             Controls.Add(groupBox3);
@@ -1869,5 +1891,7 @@
         private ToolTip toolTip1;
         private Button Save_Edit_Button;
         private Button Dat_Export;
+        private Label label80;
+        private Label Index_Label;
     }
 }

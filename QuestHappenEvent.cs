@@ -27,7 +27,334 @@ namespace QuestEditor_V2
             InitializeComponent();
 
         }
-        public void Write_Client_QuestHappenEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
+
+        public void Write_Client_QuestHappenEvent_QuestLvUpEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
+        {
+            Helpers help = new Helpers();
+
+            Bin.Write(Quest.m_dwIndex); //0
+            string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purge0 = ID0.Replace("\0", string.Empty);
+            int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
+
+            int base10 = Convert.ToInt32(helperint);
+            Bin.Write(base10);//4
+
+            byte m_nEevntNo = (byte)Quest.m_nEevntNo;
+            Bin.Write(m_nEevntNo); //8
+            byte zero = 0;
+            short zero1 = 0;
+            Bin.Write(zero);//9
+            Bin.Write(zero1);//10
+            for (int i = 0; i < 3; i++)
+            {
+                Bin.Write(Quest.m_Node[i].m_bUse); //12
+                Bin.Write(Quest.m_Node[i].m_nQuestType); //16
+                for (int y = 0; y < 5; y++)
+                {
+                    byte m_nCondType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondType;
+                    Bin.Write(m_nCondType); //20
+
+                    byte m_nCondSubType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondSubType;
+                    Bin.Write(m_nCondSubType); //21 
+                    short unknown = 0;
+                    Bin.Write(unknown); //22
+                    int m_sCondVal = 0;
+                    //this changes depending on file its from. error occurs because BWB0 
+                    m_sCondVal = help.m_sCondVal_ClassType(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+
+                    Bin.Write(m_sCondVal); //24
+                    int unknown1 = help.m_sCondVal_ItemType(Quest.m_Node[i].m_CondNode[y].m_sCondVal); ; //item type
+                    Bin.Write(unknown1);//28
+                }
+
+
+                string ID1 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_0, 0, Quest.m_Node[i].m_strLinkQuest_0.Length);
+                string purge1 = ID1.Replace("\0", string.Empty);
+                int str_0 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge1));
+
+                string ID2 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_1, 0, Quest.m_Node[i].m_strLinkQuest_1.Length);
+                string purge2 = ID2.Replace("\0", string.Empty);
+                int str_1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
+
+                string ID3 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_2, 0, Quest.m_Node[i].m_strLinkQuest_2.Length);
+                string purge3 = ID3.Replace("\0", string.Empty);
+                int str_2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge3));
+
+                string ID4 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_3, 0, Quest.m_Node[i].m_strLinkQuest_3.Length);
+                string purge4 = ID4.Replace("\0", string.Empty);
+                int str_3 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge4));
+
+                string ID5 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_4, 0, Quest.m_Node[i].m_strLinkQuest_4.Length);
+                string purge5 = ID5.Replace("\0", string.Empty);
+                int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge5));
+
+
+                Bin.Write(str_0);//80
+                Bin.Write(str_0);
+                Bin.Write(str_1);//88
+                Bin.Write(str_1);
+                Bin.Write(str_2);//96
+                Bin.Write(str_2);
+                Bin.Write(str_3);//104
+                Bin.Write(str_3);
+                Bin.Write(str_4);//112
+                Bin.Write(str_4);
+
+            }
+        }
+            public void Write_Client_QuestHappenEvent_QuestKillOtherRaceEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
+        {
+            Helpers help = new Helpers();
+
+            Bin.Write(Quest.m_dwIndex); //0
+            string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purge0 = ID0.Replace("\0", string.Empty);
+            int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
+
+            int base10 = Convert.ToInt32(helperint);
+            Bin.Write(base10);//4
+
+            byte m_nEevntNo = (byte)Quest.m_nEevntNo;
+            Bin.Write(m_nEevntNo); //8
+            byte zero = 0;
+            short zero1 = 0;
+            Bin.Write(zero);//9
+            Bin.Write(zero1);//10
+            for (int i = 0; i < 3; i++)
+            {
+                Bin.Write(Quest.m_Node[i].m_bUse); //12
+                Bin.Write(Quest.m_Node[i].m_nQuestType); //16
+                for (int y = 0; y < 5; y++)
+                {
+                    byte m_nCondType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondType;
+                    Bin.Write(m_nCondType); //20
+
+                    byte m_nCondSubType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondSubType;
+                    Bin.Write(m_nCondSubType); //21 
+                    short unknown = 0;
+                    Bin.Write(unknown); //22
+                    int m_sCondVal = 0;
+                    //this changes depending on file its from. i think its a error in base file but haven't tested it so working around it
+                    m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);                    
+
+                    Bin.Write(m_sCondVal); //24
+                    int unknown1 = help.m_sCondVal_ItemType(Quest.m_Node[i].m_CondNode[y].m_sCondVal); ; //item type
+                    Bin.Write(unknown1);//28
+                }
+
+
+                string ID1 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_0, 0, Quest.m_Node[i].m_strLinkQuest_0.Length);
+                string purge1 = ID1.Replace("\0", string.Empty);
+                int str_0 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge1));
+
+                string ID2 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_1, 0, Quest.m_Node[i].m_strLinkQuest_1.Length);
+                string purge2 = ID2.Replace("\0", string.Empty);
+                int str_1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
+
+                string ID3 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_2, 0, Quest.m_Node[i].m_strLinkQuest_2.Length);
+                string purge3 = ID3.Replace("\0", string.Empty);
+                int str_2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge3));
+
+                string ID4 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_3, 0, Quest.m_Node[i].m_strLinkQuest_3.Length);
+                string purge4 = ID4.Replace("\0", string.Empty);
+                int str_3 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge4));
+
+                string ID5 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_4, 0, Quest.m_Node[i].m_strLinkQuest_4.Length);
+                string purge5 = ID5.Replace("\0", string.Empty);
+                int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge5));
+
+
+                Bin.Write(str_0);//80
+                Bin.Write(str_0);
+                Bin.Write(str_1);//88
+                Bin.Write(str_1);
+                Bin.Write(str_2);//96
+                Bin.Write(str_2);
+                Bin.Write(str_3);//104
+                Bin.Write(str_3);
+                Bin.Write(str_4);//112
+                Bin.Write(str_4);
+
+            }
+        }
+
+            public void Write_Client_QuestHappenEvent_QuestNPCEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
+        {
+            Helpers help = new Helpers();
+
+            Bin.Write(Quest.m_dwIndex); //0
+            string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purge0 = ID0.Replace("\0", string.Empty);
+            int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
+
+            int base10 = Convert.ToInt32(helperint);
+            Bin.Write(base10);//4
+
+            byte m_nEevntNo = (byte)Quest.m_nEevntNo;
+            Bin.Write(m_nEevntNo); //8
+            byte zero = 0;
+            short zero1 = 0;
+            Bin.Write(zero);//9
+            Bin.Write(zero1);//10
+            for (int i = 0; i < 3; i++)
+            {
+                Bin.Write(Quest.m_Node[i].m_bUse); //12
+                Bin.Write(Quest.m_Node[i].m_nQuestType); //16
+                for (int y = 0; y < 5; y++)
+                {
+                    byte m_nCondType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondType;
+                    Bin.Write(m_nCondType); //20
+
+                    byte m_nCondSubType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondSubType;
+                    Bin.Write(m_nCondSubType); //21 
+                    short unknown = 0;
+                    Bin.Write(unknown); //22
+                    int m_sCondVal = 0;
+                    //this changes depending on file its from. i think its a error in base file but haven't tested it so working around it for now
+                    if (m_nCondType == 0 && m_nCondSubType == 1)
+                    {
+                        m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    if (m_nCondType == 0 && m_nCondSubType == 2)
+                    {
+                        m_sCondVal = help.m_sCondVal_Dec_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else if (m_nCondType == 8)
+                    {
+                        m_sCondVal = help.m_sCondVal_Item_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else if (m_nCondType == 12)
+                    {
+                        m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else if (m_nCondSubType == 0)
+                    {
+                        m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else
+                    {
+                        m_sCondVal = help.m_sCondVal_Dec_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+
+                    Bin.Write(m_sCondVal); //24
+                    int unknown1 = help.m_sCondVal_ItemType(Quest.m_Node[i].m_CondNode[y].m_sCondVal); ; //item type
+                    Bin.Write(unknown1);//28
+                }
+
+
+                string ID1 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_0, 0, Quest.m_Node[i].m_strLinkQuest_0.Length);
+                string purge1 = ID1.Replace("\0", string.Empty);
+                int str_0 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge1));
+
+                string ID2 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_1, 0, Quest.m_Node[i].m_strLinkQuest_1.Length);
+                string purge2 = ID2.Replace("\0", string.Empty);
+                int str_1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
+
+                string ID3 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_2, 0, Quest.m_Node[i].m_strLinkQuest_2.Length);
+                string purge3 = ID3.Replace("\0", string.Empty);
+                int str_2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge3));
+
+                string ID4 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_3, 0, Quest.m_Node[i].m_strLinkQuest_3.Length);
+                string purge4 = ID4.Replace("\0", string.Empty);
+                int str_3 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge4));
+
+                string ID5 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_4, 0, Quest.m_Node[i].m_strLinkQuest_4.Length);
+                string purge5 = ID5.Replace("\0", string.Empty);
+                int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge5));
+
+
+                Bin.Write(str_0);//80
+                Bin.Write(str_0);
+                Bin.Write(str_1);//88
+                Bin.Write(str_1);
+                Bin.Write(str_2);//96
+                Bin.Write(str_2);
+                Bin.Write(str_3);//104
+                Bin.Write(str_3);
+                Bin.Write(str_4);//112
+                Bin.Write(str_4);
+
+            }
+        }
+
+        public void Write_Client_QuestHappenEvent_QuestDummyEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
+        {
+            Helpers help = new Helpers();
+
+            Bin.Write(Quest.m_dwIndex); //0
+            string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purge0 = ID0.Replace("\0", string.Empty);
+            int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
+
+            int base10 = Convert.ToInt32(helperint);
+            Bin.Write(base10);//4
+
+            byte m_nEevntNo = (byte)Quest.m_nEevntNo;
+            Bin.Write(m_nEevntNo); //8
+            byte zero = 0;
+            short zero1 = 0;
+            Bin.Write(zero);//9
+            Bin.Write(zero1);//10
+            for (int i = 0; i < 3; i++)
+            {
+                Bin.Write(Quest.m_Node[i].m_bUse); //12
+                Bin.Write(Quest.m_Node[i].m_nQuestType); //16
+                for (int y = 0; y < 5; y++)
+                {
+                    byte m_nCondType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondType;
+                    Bin.Write(m_nCondType); //20
+
+                    byte m_nCondSubType = (byte)Quest.m_Node[i].m_CondNode[y].m_nCondSubType;
+                    Bin.Write(m_nCondSubType); //21 
+                    short unknown = 0;
+                    Bin.Write(unknown); //22
+                    int m_sCondVal = 0;
+                   //this changes depending on file its from. i think its a error in base file but haven't tested it so working around it for now
+                    m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    
+
+                    Bin.Write(m_sCondVal); //24
+                    int unknown1 = help.m_sCondVal_ItemType(Quest.m_Node[i].m_CondNode[y].m_sCondVal); ; //item type
+                    Bin.Write(unknown1);//28
+                }
+
+
+                string ID1 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_0, 0, Quest.m_Node[i].m_strLinkQuest_0.Length);
+                string purge1 = ID1.Replace("\0", string.Empty);
+                int str_0 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge1));
+
+                string ID2 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_1, 0, Quest.m_Node[i].m_strLinkQuest_1.Length);
+                string purge2 = ID2.Replace("\0", string.Empty);
+                int str_1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
+
+                string ID3 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_2, 0, Quest.m_Node[i].m_strLinkQuest_2.Length);
+                string purge3 = ID3.Replace("\0", string.Empty);
+                int str_2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge3));
+
+                string ID4 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_3, 0, Quest.m_Node[i].m_strLinkQuest_3.Length);
+                string purge4 = ID4.Replace("\0", string.Empty);
+                int str_3 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge4));
+
+                string ID5 = Encoding.UTF8.GetString(Quest.m_Node[i].m_strLinkQuest_4, 0, Quest.m_Node[i].m_strLinkQuest_4.Length);
+                string purge5 = ID5.Replace("\0", string.Empty);
+                int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge5));
+
+
+                Bin.Write(str_0);//80
+                Bin.Write(str_0);
+                Bin.Write(str_1);//88
+                Bin.Write(str_1);
+                Bin.Write(str_2);//96
+                Bin.Write(str_2);
+                Bin.Write(str_3);//104
+                Bin.Write(str_3);
+                Bin.Write(str_4);//112
+                Bin.Write(str_4);
+
+            }
+        }
+            public void Write_Client_QuestHappenEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
         {
             Helpers help = new Helpers();
 
@@ -58,9 +385,34 @@ namespace QuestEditor_V2
                     Bin.Write(m_nCondSubType); //21 
                     short unknown = 0;
                     Bin.Write(unknown); //22
-                    int m_sCondVal = help.m_sCondVal_To_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    int m_sCondVal = 0;
+                    if (m_nCondType == 0 && m_nCondSubType == 1)
+                    {
+                        m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    if (m_nCondType == 0 && m_nCondSubType == 2)
+                    {
+                        m_sCondVal = help.m_sCondVal_Dec_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else if (m_nCondType == 8)
+                    {
+                        m_sCondVal = help.m_sCondVal_Item_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else if (m_nCondType == 12)
+                    {
+                        m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else if (m_nCondSubType == 0)
+                    {
+                        m_sCondVal = help.m_sCondVal_Hex_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                    else
+                    {
+                        m_sCondVal = help.m_sCondVal_Dec_Int(Quest.m_Node[i].m_CondNode[y].m_sCondVal);
+                    }
+                   
                     Bin.Write(m_sCondVal); //24
-                    int unknown1 = 0;
+                    int unknown1 = help.m_sCondVal_ItemType(Quest.m_Node[i].m_CondNode[y].m_sCondVal); ; //item type
                     Bin.Write(unknown1);//28
                 }
 
@@ -162,6 +514,11 @@ namespace QuestEditor_V2
 
         private void Fill_Quest_Data()
         {
+            if(treeView1.SelectedNode != null)
+            {
+                Index_Label.Text = treeView1.SelectedNode.Index.ToString();
+            }
+           
             m_nEevntNo.Text = Quests[Index].m_nEevntNo.ToString();
             m_bUse_0.Text = Quests[Index].m_Node[0].m_bUse.ToString();
             m_bQuestRepeat_0.Text = Quests[Index].m_Node[0].m_bQuestRepeat.ToString();

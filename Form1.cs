@@ -100,9 +100,9 @@ namespace QuestEditor_V2
 
         private void TestValue_Click(object sender, EventArgs e)
         {
-            var myQuest_fld  = new _Quest_fld();
+            var myQuest_fld = new _Quest_fld();
             var myQuestHappenEvent = new QuestHappenEvent();
-            
+
             var List1 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestDummyEvent.dat");
             var List2 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestNPCEvent.dat");
             var List3 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestKillOtherRaceEvent.dat");
@@ -125,20 +125,31 @@ namespace QuestEditor_V2
             {
                 using (var bin = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
-                    //bin.Write(List1.Length);
-                   // bin.Write(336);
-                   // foreach(var quest in List1)
-                   // {
-                   //     myQuestHappenEvent.Write_Client_QuestHappenEvent(bin,quest);
-                   // }
-                   bin.Write(List2.Length);
-                   bin.Write(336);
-                   foreach (var quest in List2)
-                   {
-                       myQuestHappenEvent.Write_Client_QuestHappenEvent(bin, quest);
-                   }
-
-
+                    bin.Write(List1.Length);
+                    bin.Write(336);
+                    foreach(var quest in List1)
+                    {
+                       myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestDummyEvent(bin,quest);
+                    }
+                    bin.Write(List2.Length);
+                    bin.Write(336);
+                    foreach (var quest in List2)
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestNPCEvent(bin, quest);
+                    }                   
+                    bin.Write(List3.Length);
+                    bin.Write(336);
+                    foreach (var quest in List3)
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestKillOtherRaceEvent(bin, quest);
+                    }
+                    //testing need to fix values such as BWB0 to int
+                    bin.Write(List4.Length);
+                    bin.Write(336);
+                    foreach (var quest in List4)
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestLvUpEvent(bin, quest);
+                    }
 
                 }
             }
@@ -151,6 +162,53 @@ namespace QuestEditor_V2
 
              
              */
+
+
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Helpers help = new Helpers();
+           var test = help.Client_Hex("iyqla14");
+            System.IO.Directory.CreateDirectory("Client_Files");
+            string fileName = "TestFile.dat";
+            string path = Path.Combine(Environment.CurrentDirectory, @"Client_Files\", fileName);
+
+
+            using (var stream = File.Open(path, FileMode.Create))
+            {
+                using (var bin = new BinaryWriter(stream, Encoding.UTF8, false))
+                {
+                    //byte[] bytes = Encoding.UTF8.GetBytes(test);
+                    bin.Write(test);
+                }
+            }
+                   // string test2 = help.Client_Hex("iyqst02");
+            //iyqst01
+            //iyqst02
+            //iyqst03
+            //iyqst04
+            //iyqst05
+            //iyqst06
+            //iyqst07
+            //iyqst08
+            //iyqst09
+            //iyqst10
+            //iyqsa02
+            //iyqsa07
+            //iyqsa08
+            //iyqsa09
+            //iyqla10
+            //iyqla14
+            //iyqla20
+            //iyqla28
+            //iyqla42
+            //iyqla47
+            //iyqla51
+            //iyqla56
+            //iyqla61
+            //iyqla76
+            //iyqla78
 
 
         }

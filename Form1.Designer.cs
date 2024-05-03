@@ -42,6 +42,7 @@
             Generate_Client = new Button();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
+            button12 = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -194,11 +195,22 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Client Files";
             // 
+            // button12
+            // 
+            button12.Location = new Point(685, 186);
+            button12.Name = "button12";
+            button12.Size = new Size(75, 23);
+            button12.TabIndex = 15;
+            button12.Text = "button12";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button12);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(Generate_Client);
@@ -224,5 +236,6 @@
         private Button Generate_Client;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
+        private Button button12;
     }
 }

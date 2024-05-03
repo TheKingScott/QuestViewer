@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using static QuestEditor_V2.Structure;
 using static System.Net.Mime.MediaTypeNames;
@@ -44,8 +45,172 @@ namespace QuestEditor_V2
             InitializeComponent();
 
         }
+        public void Write_Client__Quest_fld(BinaryWriter Bin, Structure._Quest_fld Quest)
+        {
+            Helpers help = new Helpers();
+            Bin.Write(Quest.m_dwIndex);
+            string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
+            string purge0 = ID0.Replace("\0", string.Empty);
+            int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
 
-        public Structure._Quest_fld[] ReadFile_Quest_fld(string path)
+            int base10 = Convert.ToInt32(helperint);
+            Bin.Write(base10);//4
+
+           
+            Bin.Write((short)Quest.m_nQuestType);
+            Bin.Write((short)Quest.m_nDifficultyLevel);
+            Bin.Write((short)Quest.m_n2);
+            Bin.Write((short)Quest.m_nLimLv);
+            Bin.Write((short)0);
+            Bin.Write((short)0);
+            Bin.Write((short)0);
+            for(int i = 0; i < 3; i++)
+            {
+                
+                Bin.Write((short)Quest.m_ActionNode[i].m_nActType);
+                Bin.Write((short)0);
+                Bin.Write((short)0);
+
+                string IDN1 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strActSub, 0, Quest.m_ActionNode[i].m_strActSub.Length);
+                string purgeN1 = IDN1.Replace("\0", string.Empty);
+                int m_strActSub = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN1));
+
+                string IDN2 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strActSub2, 0, Quest.m_ActionNode[i].m_strActSub2.Length);
+                string purgeN2 = IDN2.Replace("\0", string.Empty);
+                int m_strActSub2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN2));
+
+                string IDN3 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strActArea, 0, Quest.m_ActionNode[i].m_strActArea.Length);
+                string purgeN3 = IDN3.Replace("\0", string.Empty);
+                int m_strActArea = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN3));
+                
+                Bin.Write(m_strActSub);
+                Bin.Write(m_strActSub2);
+                Bin.Write(m_strActArea);
+               
+                Bin.Write(Quest.m_ActionNode[i].m_nReqAct);
+                //int NDQuestQuestConditionContent;
+               // int NDQuestQuestConditionResult;
+
+                string IDN4 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strLinkQuestItem, 0, Quest.m_ActionNode[i].m_strLinkQuestItem.Length);
+                string purgeN4 = IDN4.Replace("\0", string.Empty);
+                int QuestItem = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN4));
+
+                Bin.Write(QuestItem);
+
+
+            }
+
+            Bin.Write(Quest.m_dConsExp);
+            Bin.Write(Quest.m_nConsDalant);
+            Bin.Write(Quest.m_nConsGold);
+            Bin.Write(Quest.m_nConsContribution);
+            Bin.Write(Quest.m_nConspvppoint);
+            for(int i = 0; i < 6; i++)
+            {             
+
+               // char Item_Code; Quest.m_RewardItem[i];
+                Bin.Write(0);
+                
+                string IDI = Encoding.UTF8.GetString(Quest.m_RewardItem[i].m_strConsITCode, 0, Quest.m_RewardItem[i].m_strConsITCode.Length);
+                string purgeI = IDI.Replace("\0", string.Empty);
+                int m_strConsITCode = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeI));
+
+                Bin.Write(m_strConsITCode);
+
+                Bin.Write((short)Quest.m_RewardItem[i].m_nConsITCnt);
+                Bin.Write(0);
+
+
+            }
+
+            for(int i = 0; i < 2; i++)
+            {             
+               
+                Bin.Write((short)Quest.m_RewardMastery[i].m_nConsMasteryID);
+                Bin.Write((short)0);                
+                Bin.Write(Quest.m_RewardMastery[i].m_nConsMasteryCnt);
+            }
+
+            string ID1 = Encoding.UTF8.GetString(Quest.m_strConsSkillCode, 0, Quest.m_strConsSkillCode.Length);
+            string purge1 = ID1.Replace("\0", string.Empty);
+            int helperint1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge1));
+
+            string ID2 = Encoding.UTF8.GetString(Quest.m_strConsForceCode, 0, Quest.m_strConsForceCode.Length);
+            string purge2 = ID2.Replace("\0", string.Empty);
+            int helperint2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
+
+            Bin.Write(helperint1);
+            Bin.Write(Quest.m_nConsSkillCnt);
+            Bin.Write(helperint2);
+            Bin.Write(Quest.m_nConsForceCnt);
+            //int NDQuest_QuestFinishContentSuccess[5];
+            //int NDQuest_QuestFinishContentFail[5];
+            
+
+            string ID10 = Encoding.UTF8.GetString(Quest.m_strLinkQuest_0, 0, Quest.m_strLinkQuest_0.Length);
+            string purge10 = ID10.Replace("\0", string.Empty);
+            int str_0 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge10));
+
+            string ID11 = Encoding.UTF8.GetString(Quest.m_strLinkQuest_1, 0, Quest.m_strLinkQuest_1.Length);
+            string purge11 = ID11.Replace("\0", string.Empty);
+            int str_1 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge11));
+
+            string ID12 = Encoding.UTF8.GetString(Quest.m_strLinkQuest_2, 0, Quest.m_strLinkQuest_2.Length);
+            string purge12 = ID12.Replace("\0", string.Empty);
+            int str_2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge12));
+
+            string ID13 = Encoding.UTF8.GetString(Quest.m_strLinkQuest_3, 0, Quest.m_strLinkQuest_3.Length);
+            string purge13 = ID13.Replace("\0", string.Empty);
+            int str_3 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge13));
+
+            string ID14 = Encoding.UTF8.GetString(Quest.m_strLinkQuest_4, 0, Quest.m_strLinkQuest_4.Length);
+            string purge14 = ID14.Replace("\0", string.Empty);
+            int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge14));
+
+            Bin.Write(str_0);
+            Bin.Write(str_0);
+            Bin.Write(str_1);
+            Bin.Write(str_1);
+            Bin.Write(str_2);
+            Bin.Write(str_2);
+            Bin.Write(str_3);
+            Bin.Write(str_3);
+            Bin.Write(str_4);
+            Bin.Write(str_4);
+
+            //int QuestNameContentIndex;
+            //int QuestBriefContent[5];
+           // int QuestSummaryContent[5];
+            Bin.Write(Quest.m_nStore_trade);
+            for(int i = 0; i < 3; i++)
+            {              
+                //int m_bFailCheck;
+                Bin.Write(Quest.m_QuestFailCond[i].m_nFailCondition);
+
+                string IDF = Encoding.UTF8.GetString(Quest.m_QuestFailCond[i].m_strFailCode, 0, Quest.m_QuestFailCond[i].m_strFailCode.Length);
+                string purgeF = IDF.Replace("\0", string.Empty);
+                int str_F = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeF));
+
+                Bin.Write(str_F);
+
+            }
+
+            Bin.Write(0);
+            Bin.Write(Quest.m_nViewportType);
+
+            string ID4 = Encoding.UTF8.GetString(Quest.m_strViewportCode, 0, Quest.m_strViewportCode.Length);
+            string purge4 = ID4.Replace("\0", string.Empty);
+            int m_strViewportCode = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge4));
+
+            string ID5 = Encoding.UTF8.GetString(Quest.m_strFailLinkQuest, 0, Quest.m_strFailLinkQuest.Length);
+            string purge5 = ID5.Replace("\0", string.Empty);
+            int FailLinkQuest = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge5));
+
+            Bin.Write(m_strViewportCode);           
+            Bin.Write(0);
+            Bin.Write(FailLinkQuest); 
+        }
+            public Structure._Quest_fld[] ReadFile_Quest_fld(string path)
         {
             using (var stream = System.IO.File.OpenRead(path))
             using (var reader = new BinaryReader(stream))
