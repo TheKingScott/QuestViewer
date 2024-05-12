@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -39,13 +40,382 @@ namespace QuestEditor_V2
         NameValueCollection QuestFinish_KV_List = new NameValueCollection();
         NameValueCollection QuestSummary_KV_List = new NameValueCollection();
         NameValueCollection QuestName_KV_List = new NameValueCollection();
-
+        List<QuestTextNumbers> DataPile = new List<QuestTextNumbers>(); //client data ints for export
+        NameValueCollection QuestItem_KV_List = new NameValueCollection(); //clientdataExport
+        List<QuestItems> QuestItem;
         public _Quest_fld()
         {
             InitializeComponent();
 
         }
-        public void Write_Client__Quest_fld(BinaryWriter Bin, Structure._Quest_fld Quest)
+        public void Build_ClientQUestValues()
+        {
+            int test = Quest_KV_List.Count;
+            int QuestBrief = QuestBrief_KV_List.Count;
+            int QuestCondition = QuestCondition_KV_List.Count;
+            int QuestFinish = QuestFinish_KV_List.Count; //test 4
+            int QuestSummary = QuestSummary_KV_List.Count;
+            int QuestName = QuestName_KV_List.Count;         
+          
+            int QBC = 0;
+            int QSC = 0;
+            int QCR = 0;
+            int QFCU = 0;
+            int QFCF = 0;
+            int QuestTitle = 0;
+
+            QuestTextCode previous = new QuestTextCode();
+           // var items = QuestName_KV_List.AllKeys.SelectMany(QuestName_KV_List.GetValues, (k, v) => new { key = k, value = v });
+            foreach (var item in QuestTextCodes)
+            {
+                QuestTextNumbers temp = new QuestTextNumbers();
+                //if an negative number
+                #region QTitle_CQ
+                string Title = Encoding.UTF8.GetString(item.m_strCode_0, 0, item.m_strCode_0.Length);
+                string purgezero = Title.Replace("\0", string.Empty);
+                string[] values1 = QuestName_KV_List.GetValues(purgezero);
+                if (values1 != null)
+                {
+                    temp.QuestNameNumber = QuestTitle;
+                    QuestTitle++;
+                }
+                else
+                {
+                    temp.QuestNameNumber = -1;
+                }
+                #endregion
+
+                
+                #region QuestBriefContent_QDesc1_CR
+                if (item.m_strQuestBriefContents_0[0] == 45)
+                {
+                    temp.m_strQuestBriefContents_0 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestBriefContents_0 = QuestName + QBC;
+                    if(previous.m_strQuestBriefContents_0 != item.m_strQuestBriefContents_0)
+                    {
+                        QBC++;
+                    }
+                    
+                }
+                if (item.m_strQuestBriefContents_1[0] == 45)
+                {
+                    temp.m_strQuestBriefContents_1 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestBriefContents_1 = QuestName + QBC;
+                    if (previous.m_strQuestBriefContents_1 != item.m_strQuestBriefContents_1)
+                    {
+                        QBC++;
+                    }
+                }
+                if (item.m_strQuestBriefContents_2[0] == 45)
+                {
+                    temp.m_strQuestBriefContents_2 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestBriefContents_2 = QuestName + QBC;
+                    if (previous.m_strQuestBriefContents_2 != item.m_strQuestBriefContents_2)
+                    {
+                        QBC++;
+                    }
+                }
+                if (item.m_strQuestBriefContents_3[0] == 45)
+                {
+                    temp.m_strQuestBriefContents_3 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestBriefContents_3 = QuestName + QBC;
+                    if (previous.m_strQuestBriefContents_3 != item.m_strQuestBriefContents_3)
+                    {
+                        QBC++;
+                    }
+                }
+                if (item.m_strQuestBriefContents_4[0] == 45)
+                {
+                    temp.m_strQuestBriefContents_4 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestBriefContents_4 = QuestName + QBC;
+                    if (previous.m_strQuestBriefContents_4 != item.m_strQuestBriefContents_4)
+                    {
+                        QBC++;
+                    }
+                }
+                #endregion
+
+                #region QuestSummaryContent_BriefDesc_CW
+                if (item.m_strQuestSummaryContents_0[0] == 45)
+                {
+                    temp.m_strQuestSummaryContents_0 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestSummaryContents_0 = QuestName + QuestBrief + QSC;                  
+                    if (previous.m_strQuestSummaryContents_0 != item.m_strQuestSummaryContents_0)
+                    {
+                        QSC++;
+                    }
+                }
+                if (item.m_strQuestSummaryContents_1[0] == 45)
+                {
+                    temp.m_strQuestSummaryContents_1 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestSummaryContents_1 = QuestName + QuestBrief + QSC;
+                    if (previous.m_strQuestSummaryContents_1 != item.m_strQuestSummaryContents_1)
+                    {
+                        QSC++;
+                    }
+                }
+                if (item.m_strQuestSummaryContents_2[0] == 45)
+                {
+                    temp.m_strQuestSummaryContents_2 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestSummaryContents_2 = QuestName + QuestBrief + QSC;
+                    if (previous.m_strQuestSummaryContents_2 != item.m_strQuestSummaryContents_2)
+                    {
+                        QSC++;
+                    }
+                }
+                if (item.m_strQuestSummaryContents_3[0] == 45)
+                {
+                    temp.m_strQuestSummaryContents_3 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestSummaryContents_3 = QuestName + QuestBrief + QSC;
+                    if (previous.m_strQuestSummaryContents_3 != item.m_strQuestSummaryContents_3)
+                    {
+                        QSC++;
+                    }
+                }
+                if (item.m_strQuestSummaryContents_4[0] == 45)
+                {
+                    temp.m_strQuestSummaryContents_4 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestSummaryContents_4 = QuestName + QuestBrief + QSC;
+                    if (previous.m_strQuestSummaryContents_4 != item.m_strQuestSummaryContents_4)
+                    {
+                        QSC++;
+                    }
+                }
+                #endregion
+               
+                #region QuestConditionResult_TaskInGUI_AE
+                if (item.m_strQuestConditionResult_0[0] == 45)
+                {
+                    temp.m_strQuestConditionResult_0 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestConditionResult_0 = QuestName + QuestBrief + QuestSummary + QCR;                 
+                    if (previous.m_strQuestConditionResult_0 != item.m_strQuestConditionResult_0)
+                    {
+                        QCR++;
+                    }
+                }
+                if (item.m_strQuestConditionResult_1[0] == 45)
+                {
+                    temp.m_strQuestConditionResult_1 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestConditionResult_1 = QuestName + QuestBrief + QuestSummary + QCR;
+                    if (previous.m_strQuestConditionResult_1 != item.m_strQuestConditionResult_1)
+                    {
+                        QCR++;
+                    }
+                }
+                if (item.m_strQuestConditionResult_2[0] == 45)
+                {
+                    temp.m_strQuestConditionResult_2 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestConditionResult_2 = QuestName + QuestBrief + QuestSummary + QCR;
+                    if (previous.m_strQuestConditionResult_2 != item.m_strQuestConditionResult_2)
+                    {
+                        QCR++;
+                    }
+                }
+                if (item.m_strQuestConditionResult_3[0] == 45)
+                {
+                    temp.m_strQuestConditionResult_3 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestConditionResult_3 = QuestName + QuestBrief + QuestSummary + QCR;
+                    if (previous.m_strQuestConditionResult_3 != item.m_strQuestConditionResult_3)
+                    {
+                        QCR++;
+                    }
+                }
+                if (item.m_strQuestConditionResult_4[0] == 45)
+                {
+                    temp.m_strQuestConditionResult_4 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestConditionResult_4 = QuestName + QuestBrief + QuestSummary + QCR;
+                    if (previous.m_strQuestConditionResult_4 != item.m_strQuestConditionResult_4)
+                    {
+                        QCR++;
+                    }
+                }
+                #endregion
+                
+                #region QuestFinishContents_TaskInBrief_AF
+                if (item.m_strQuestFinishContents_U0[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_U0 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_U0 = QuestName + QuestBrief + QuestSummary + QuestCondition + QFCU;                   
+                    if (previous.m_strQuestFinishContents_U0 != item.m_strQuestFinishContents_U0)
+                    {
+                        QFCU++;
+                    }
+
+                }
+                if (item.m_strQuestFinishContents_U1[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_U1 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_U1 = QuestName + QuestBrief + QuestSummary + QuestCondition + QFCU;
+                    if (previous.m_strQuestFinishContents_U1 != item.m_strQuestFinishContents_U1)
+                    {
+                        QFCU++;
+                    }
+                }
+                if (item.m_strQuestFinishContents_U2[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_U2 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_U2 = QuestName + QuestBrief + QuestSummary + QuestCondition + QFCU;
+                    if (previous.m_strQuestFinishContents_U2 != item.m_strQuestFinishContents_U2)
+                    {
+                        QFCU++;
+                    }
+                }
+                if (item.m_strQuestFinishContents_U3[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_U3 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_U3 = QuestName + QuestBrief + QuestSummary + QuestCondition + QFCU;
+                    if (previous.m_strQuestFinishContents_U3 != item.m_strQuestFinishContents_U3)
+                    {
+                        QFCU++;
+                    }
+                }
+                if (item.m_strQuestFinishContents_U4[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_U4 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_U4 = QuestName + QuestBrief + QuestSummary + QuestCondition + QFCU;
+                    if (previous.m_strQuestFinishContents_U4 != item.m_strQuestFinishContents_U4)
+                    {
+                        QFCU++;
+                    }
+                }
+                #endregion
+
+                #region QuestFinishContents_QSDesc1_BW
+                temp.Client_IsFailCheck = new int[3];
+                if (item.m_strQuestFinishContents_F0[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_F0 = -1;
+                    temp.Client_IsFailCheck[0] = 0;
+                }
+                else
+                {
+                    temp.Client_IsFailCheck[0] = 1;
+                    temp.m_strQuestFinishContents_F0 = QuestName + QuestBrief + QuestSummary + QuestCondition + QuestFinish + QFCF;                 
+                    if (previous.m_strQuestFinishContents_F0 != item.m_strQuestFinishContents_F0)
+                    {
+                        QFCF++;
+                    }
+
+                }
+                temp.Client_IsFailCheck[1] = 0;
+                temp.Client_IsFailCheck[2] = 0;
+                if (item.m_strQuestFinishContents_F1[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_F1 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_F1 = QuestName + QuestBrief + QuestSummary + QuestCondition + QuestFinish + QFCF;
+                    if (previous.m_strQuestFinishContents_F1 != item.m_strQuestFinishContents_F1)
+                    {
+                        QFCF++;
+                    }
+                }
+                if (item.m_strQuestFinishContents_F2[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_F2 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_F2 = QuestName + QuestBrief + QuestSummary + QuestCondition + QuestFinish + QFCF;
+                    if (previous.m_strQuestFinishContents_F2 != item.m_strQuestFinishContents_F2)
+                    {
+                        QFCF++;
+                    }
+                }
+                if (item.m_strQuestFinishContents_F3[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_F3 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_F3 = QuestName + QuestBrief + QuestSummary + QuestCondition + QuestFinish + QFCF;
+                    if (previous.m_strQuestFinishContents_F3 != item.m_strQuestFinishContents_F3)
+                    {
+                        QFCF++;
+                    }
+                }
+                if (item.m_strQuestFinishContents_F4[0] == 45)
+                {
+                    temp.m_strQuestFinishContents_F4 = -1;
+                }
+                else
+                {
+                    temp.m_strQuestFinishContents_F4 = QuestName + QuestBrief + QuestSummary + QuestCondition + QuestFinish + QFCF;
+                    if (previous.m_strQuestFinishContents_F4 != item.m_strQuestFinishContents_F4)
+                    {
+                        QFCF++;
+                    }
+                }
+                #endregion
+
+                temp.QuestNameIndex = item.m_dwIndex.ToString();
+                DataPile.Add(temp);
+                previous = item;
+            }
+            int hello = 0;
+        }
+        public void Write_Client__Quest_fld(BinaryWriter Bin, Structure._Quest_fld Quest, int QuestIndex)
         {
             Helpers help = new Helpers();
             Bin.Write(Quest.m_dwIndex);
@@ -54,7 +424,7 @@ namespace QuestEditor_V2
             int helperint = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge0));
 
             int base10 = Convert.ToInt32(helperint);
-            Bin.Write(base10);//4
+            Bin.Write(base10);
 
            
             Bin.Write((short)Quest.m_nQuestType);
@@ -63,21 +433,36 @@ namespace QuestEditor_V2
             Bin.Write((short)Quest.m_nLimLv);
             Bin.Write((short)0);
             Bin.Write((short)0);
-            Bin.Write((short)0);
-            for(int i = 0; i < 3; i++)
+            Bin.Write((short)0); //22
+            for(int i = 0; i < 3; i++) //34 * 3
             {
                 
-                Bin.Write((short)Quest.m_ActionNode[i].m_nActType);
-                Bin.Write((short)0);
+                Bin.Write((byte)Quest.m_ActionNode[i].m_nActType);
+                Bin.Write((byte)0);
                 Bin.Write((short)0);
 
                 string IDN1 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strActSub, 0, Quest.m_ActionNode[i].m_strActSub.Length);
                 string purgeN1 = IDN1.Replace("\0", string.Empty);
-                int m_strActSub = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN1));
-
                 string IDN2 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strActSub2, 0, Quest.m_ActionNode[i].m_strActSub2.Length);
                 string purgeN2 = IDN2.Replace("\0", string.Empty);
-                int m_strActSub2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN2));
+
+                int m_strActSub;
+                int m_strActSub2; 
+                if (Quest.m_ActionNode[i].m_nActType == 4 )
+                {
+                    m_strActSub = help.Client_Hex(purgeN1);
+                    m_strActSub2 = help.Client_Hex(purgeN2);
+                }
+                else if( Quest.m_ActionNode[i].m_nActType == 14)
+                {
+                    m_strActSub = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN1));
+                    m_strActSub2 = help.Client_Hex(purgeN2);
+                }
+                else
+                {
+                    m_strActSub = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN1));
+                    m_strActSub2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN2));
+                }                           
 
                 string IDN3 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strActArea, 0, Quest.m_ActionNode[i].m_strActArea.Length);
                 string purgeN3 = IDN3.Replace("\0", string.Empty);
@@ -85,27 +470,38 @@ namespace QuestEditor_V2
                 
                 Bin.Write(m_strActSub);
                 Bin.Write(m_strActSub2);
-                Bin.Write(m_strActArea);
+               // Bin.Write(m_strActArea); //not used in spreadsheet
                
-                Bin.Write(Quest.m_ActionNode[i].m_nReqAct);
-                //int NDQuestQuestConditionContent;
-               // int NDQuestQuestConditionResult;
+                Bin.Write(Quest.m_ActionNode[i].m_nReqAct);  //AD
+
+                Bin.Write(DataPile[QuestIndex].m_strQuestConditionResult_0);  //AE
+                Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U0);
+                
 
                 string IDN4 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strLinkQuestItem, 0, Quest.m_ActionNode[i].m_strLinkQuestItem.Length);
                 string purgeN4 = IDN4.Replace("\0", string.Empty);
-                int QuestItem = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeN4));
+                int QuestItem ;//= 0 based index array lookup
+                if (purgeN4 == null)
+                {
+                    QuestItem = -1;
+                }              
+                else
+                {                  
+                    var testing = QuestItem_KV_List.GetValues(purgeN4);                
+                    QuestItem = Convert.ToInt32(testing[0]);                                            
+                    
+                }
+                Bin.Write(QuestItem); //AG
 
-                Bin.Write(QuestItem);
 
+            } //124
 
-            }
-
-            Bin.Write(Quest.m_dConsExp);
+            Bin.Write(Quest.m_dConsExp); //AH
             Bin.Write(Quest.m_nConsDalant);
             Bin.Write(Quest.m_nConsGold);
             Bin.Write(Quest.m_nConsContribution);
-            Bin.Write(Quest.m_nConspvppoint);
-            for(int i = 0; i < 6; i++)
+            Bin.Write(Quest.m_nConspvppoint); //144
+            for(int i = 0; i < 6; i++) //14 * 6
             {             
 
                // char Item_Code; Quest.m_RewardItem[i];
@@ -113,23 +509,36 @@ namespace QuestEditor_V2
                 
                 string IDI = Encoding.UTF8.GetString(Quest.m_RewardItem[i].m_strConsITCode, 0, Quest.m_RewardItem[i].m_strConsITCode.Length);
                 string purgeI = IDI.Replace("\0", string.Empty);
-                int m_strConsITCode = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purgeI));
+                int m_strConsITCode;
+                if (purgeI == null)
+                {
+                    m_strConsITCode = -1;
+                }
+                else if (purgeI == "-1")
+                {
+                    m_strConsITCode = -1;
+                }
+                else
+                {
+                   
+                    m_strConsITCode = help.Client_Hex(purgeI);
+                }
 
-                Bin.Write(m_strConsITCode);
+                Bin.Write(m_strConsITCode);//AM
 
                 Bin.Write((short)Quest.m_RewardItem[i].m_nConsITCnt);
                 Bin.Write(0);
 
 
-            }
+            }//228
 
             for(int i = 0; i < 2; i++)
             {             
                
-                Bin.Write((short)Quest.m_RewardMastery[i].m_nConsMasteryID);
+                Bin.Write((short)Quest.m_RewardMastery[i].m_nConsMasteryID); //BK
                 Bin.Write((short)0);                
                 Bin.Write(Quest.m_RewardMastery[i].m_nConsMasteryCnt);
-            }
+            }//248
 
             string ID1 = Encoding.UTF8.GetString(Quest.m_strConsSkillCode, 0, Quest.m_strConsSkillCode.Length);
             string purge1 = ID1.Replace("\0", string.Empty);
@@ -139,13 +548,26 @@ namespace QuestEditor_V2
             string purge2 = ID2.Replace("\0", string.Empty);
             int helperint2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge2));
 
-            Bin.Write(helperint1);
+            Bin.Write(helperint1);  //BS
             Bin.Write(Quest.m_nConsSkillCnt);
             Bin.Write(helperint2);
             Bin.Write(Quest.m_nConsForceCnt);
-            //int NDQuest_QuestFinishContentSuccess[5];
-            //int NDQuest_QuestFinishContentFail[5];
+            ///BW m_strQuestFinishContents_F0
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F0);  //BX
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F1);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F2);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F3);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F4);
+
+            //double check this section it may be wrong
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U0);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U1);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U2);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U3);
+            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U4);
+            //end of double check section
             
+           // 308
 
             string ID10 = Encoding.UTF8.GetString(Quest.m_strLinkQuest_0, 0, Quest.m_strLinkQuest_0.Length);
             string purge10 = ID10.Replace("\0", string.Empty);
@@ -167,8 +589,8 @@ namespace QuestEditor_V2
             string purge14 = ID14.Replace("\0", string.Empty);
             int str_4 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes(purge14));
 
-            Bin.Write(str_0);
-            Bin.Write(str_0);
+            Bin.Write(str_0);  //CG
+            Bin.Write(str_0);  
             Bin.Write(str_1);
             Bin.Write(str_1);
             Bin.Write(str_2);
@@ -176,15 +598,24 @@ namespace QuestEditor_V2
             Bin.Write(str_3);
             Bin.Write(str_3);
             Bin.Write(str_4);
-            Bin.Write(str_4);
+            Bin.Write(str_4);  //CP
 
-            //int QuestNameContentIndex;
-            //int QuestBriefContent[5];
-           // int QuestSummaryContent[5];
-            Bin.Write(Quest.m_nStore_trade);
-            for(int i = 0; i < 3; i++)
-            {              
-                //int m_bFailCheck;
+            Bin.Write(DataPile[QuestIndex].QuestNameNumber);
+            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_0);
+            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_1);
+            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_2);
+            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_3);
+            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_4);            
+            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_0);
+            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_1);
+            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_2);
+            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_3);
+            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_4);
+           
+            Bin.Write(Quest.m_nStore_trade); //396
+            for (int i = 0; i < 3; i++)
+            {
+                Bin.Write(DataPile[QuestIndex].Client_IsFailCheck[i]);
                 Bin.Write(Quest.m_QuestFailCond[i].m_nFailCondition);
 
                 string IDF = Encoding.UTF8.GetString(Quest.m_QuestFailCond[i].m_strFailCode, 0, Quest.m_QuestFailCond[i].m_strFailCode.Length);
@@ -193,7 +624,7 @@ namespace QuestEditor_V2
 
                 Bin.Write(str_F);
 
-            }
+            }//432
 
             Bin.Write(0);
             Bin.Write(Quest.m_nViewportType);
@@ -208,7 +639,11 @@ namespace QuestEditor_V2
 
             Bin.Write(m_strViewportCode);           
             Bin.Write(0);
-            Bin.Write(FailLinkQuest); 
+            Bin.Write(FailLinkQuest);
+
+          
+            
+
         }
             public Structure._Quest_fld[] ReadFile_Quest_fld(string path)
         {
@@ -304,14 +739,59 @@ namespace QuestEditor_V2
                 NPCCharacter();
 
             }
-            QuestConditionResult();
-            QuestBriefContents();
+            PrepareQuestServerSide();
+
+
+            Fill_Quest_Data();
+            
+        }
+        public void PrepareQuestServerSide()
+        {
+            QuestNameContents();
+            QuestItemContents();
+            QuestBriefContents(); 
             QuestSummaryContents();
+            QuestConditionResult();
             QuestFinishContents();
             QuestTextCodeRead();
-            QuestNameContents();
-            Fill_Quest_Data();
         }
+        private void QuestItemContents()
+        {
+            string path = "QuestItem.dat";
+            if (File.Exists(path))
+            {
+                using (var stream = System.IO.File.OpenRead(path))
+                using (var reader = new BinaryReader(stream))
+                {
+                    int _Header = reader.ReadInt32();
+                    int _columns = reader.ReadInt32();
+                    int _size = reader.ReadInt32();
+
+                    QuestItem = new List<QuestItems>();
+                    for (int i = 0; i < _Header; i++)
+                    {
+                        QuestItem.Add(STR.Read_QuestItems(reader));
+
+                    }
+                    int indexvalue = 0;
+                    QuestItem_KV_List.Add("-1", "-1");
+                    foreach (var str in QuestItem)
+                    {
+                        string ID = Encoding.UTF8.GetString(str.m_strID, 0, str.m_strID.Length);                       
+                        string purge0 = ID.Replace("\0", string.Empty);                       
+                        QuestItem_KV_List.Add(purge0, indexvalue.ToString());
+                        indexvalue++;
+
+                    }
+
+                    GC.KeepAlive(STR_QuestName);
+                    reader.Dispose();
+                    reader.Close();
+                }
+
+            }
+        }
+
         private void QuestNameContents()
         {
             string path = "QuestNameContents_str.dat";
@@ -352,8 +832,6 @@ namespace QuestEditor_V2
 
         private void QuestTextCodeRead()
         {
-
-
             string path = "QuestTextCode.dat";
             if (File.Exists(path))
             {
@@ -376,8 +854,6 @@ namespace QuestEditor_V2
                 }
 
             }
-
-
 
         }
 

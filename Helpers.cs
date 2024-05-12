@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Diagnostics.Eventing.Reader;
 using System.Text;
 
@@ -7,6 +8,8 @@ namespace QuestEditor_V2
 {
     internal class Helpers
     {
+        
+
         public string ByteString(byte[] Bytes)
         {
             return (Encoding.UTF8.GetString(Bytes, 0, Bytes.Length)).Replace("\0", string.Empty);
@@ -69,9 +72,12 @@ namespace QuestEditor_V2
         }
 
         public int Client_Hex(string item)
-        {
+        {            
             string PlaceOne;
-
+            if(item.Length == 2)
+            {
+                return -1;
+            }           
             if(item.StartsWith("gt"))
             {
                 PlaceOne = "160";
@@ -124,7 +130,7 @@ namespace QuestEditor_V2
             string two = "";
             string three = "";
             string four = "";
-            string five = "";
+            string five = "0";
 
 
             for (int i = 0; i < (placeholder.Length); i++)
@@ -196,30 +202,35 @@ namespace QuestEditor_V2
 
         public int m_sCondVal_ClassType(byte[] Bytes)
         {
+            Character help = new Character();
             string ID = Encoding.UTF8.GetString(Bytes, 0, Bytes.Length);
 
             string purge0 = ID.Replace("\0", string.Empty);
-            if(purge0.Length == 1)
+
+            if (purge0 == "-1")
+            {
+                int value = -1;
+                return value;
+            }
+
+            if (purge0.Length == 1 || purge0.Length == 2)
             {
                 return Convert.ToInt32(purge0, 16);
             }
-            string one_0 = "";
-            string one_1 = "";
-            //todo expand to handle all classes
-            if (purge0.StartsWith("BW"))
-            {              
-                one_0 = "10";
-                one_1 = "60";
-            }
-            string two = ID.Substring(2,1);
-            string three = ID.Substring(3,1);
-            var two2 = Convert.ToInt32(two.ToLower(), 16);
-            var three2 = Convert.ToInt32(three.ToLower(), 16);
-            string testview1 = String.Format("{0:X02}{1:X02}{2:D02}{3:D02}", one_0, one_1, two2, three2);
 
-           var testsomething = Convert.ToInt32(testview1, 16);
-           var tester =  (int)ReverseBytes((uint)testsomething);
-            int value = 0;
+            
+
+            string[] key = help.ClassType_KV_List.GetValues(purge0);
+
+            var testview1= "0";
+            if (key.Length > 0)
+            {
+                testview1 = key[0];
+            }
+            
+            var testsomething = Convert.ToInt32(testview1, 16);
+            var tester =  (int)ReverseBytes((uint)testsomething);
+            
             return tester;
 
         }
@@ -332,16 +343,45 @@ namespace QuestEditor_V2
             
             int dec = Convert.ToInt32(purge0, 10); //npcevent uses base 10
             return dec;
-        }
+        }         
+        
+        //zero based index lookup
+        public int Hex_LinqQuestItem(byte[] Bytes)
+        {
+            if (Bytes.Length == 2)
+            {
+                return -1;
+            }
+            if (Bytes.Length == 7)
+            {
+                string result = System.Text.Encoding.UTF8.GetString(Bytes, 0, 7);
+                string Last = System.Text.Encoding.UTF8.GetString(Bytes, 0, 1);
+                string Last2 = System.Text.Encoding.UTF8.GetString(Bytes, 1, 1);
+                string secondToLast = System.Text.Encoding.UTF8.GetString(Bytes, 1, 2);
 
+                string thirdToLast = System.Text.Encoding.UTF8.GetString(Bytes, 3, 2);
+                string FourthToLast = System.Text.Encoding.UTF8.GetString(Bytes, 5, 2);
+
+               string happy = Last + secondToLast + thirdToLast + FourthToLast;
+                int hex = Convert.ToInt32(happy, 16);
+                return hex;
+            }
+
+                return -1;
+
+        }
 
         public int Hex_ServerCodeToClient(byte[] Bytes)
         {
+            if(Bytes.Length == 2)
+            {
+                return -1;
+            }
             if (Bytes.Length == 7)
             {           
                 string result = System.Text.Encoding.UTF8.GetString(Bytes, 0, 7);
                 string Last = System.Text.Encoding.UTF8.GetString(Bytes, 0, 1);
-                string Last2 = System.Text.Encoding.UTF8.GetString(Bytes, 0, 2);
+                string Last2 = System.Text.Encoding.UTF8.GetString(Bytes, 1, 1);
                 string secondToLast = System.Text.Encoding.UTF8.GetString(Bytes, 1, 2);
                 
                 string thirdToLast = System.Text.Encoding.UTF8.GetString(Bytes, 3, 2);
@@ -352,15 +392,32 @@ namespace QuestEditor_V2
                 if (Last == "Q")
                 {
                     Last = "10";
-                    happy = Last + secondToLast + thirdToLast + FourthToLast;
+                    
+                    if(result.StartsWith("QI"))//error on I  not event in parser files so 0 for now
+                    {
+
+                        return 0;
+                    }
+                    else
+                    {
+                        happy = Last + secondToLast + thirdToLast + FourthToLast;
+                    }
                    int hex = Convert.ToInt32(happy, 16);
                     return hex;
                 }
                 if (Last == "e")
                 {
-                    Last = "64";
+                    //Last = "64";
+                    if(Last2 == "d")
+                    {
+                        Last2 = "64";
+                    }
+                    else if (Last2 == "i")
+                    {
+                        Last2 = "69";
+                    }
                     secondToLast = "65";
-                    happy = Last + secondToLast + thirdToLast + FourthToLast;
+                    happy = Last2 + secondToLast + thirdToLast + FourthToLast;
                     int hex = Convert.ToInt32(happy, 16);
                     return hex;
                 }
@@ -376,16 +433,76 @@ namespace QuestEditor_V2
                 string result = System.Text.Encoding.UTF8.GetString(Bytes, 0, 5);
                 int hex = Convert.ToInt32(result, 16);
                 return hex;                            
-
             }
-            int hex1 = -1;
-            return hex1;
            
-
-            
+            int hex2 = -1;
+            return hex2;
+                       
         }
 
+        int Bin_fix(string data)
+        {
+            if (data == "00010")
+            {
+                return 5;
+            }
+            if (data == "10010")
+            {
+                return 3;
+            }
+            return 0;
+        }
+        public int Quest_Hex(string Bytes)
+        {
+            int hex = 0;
+            if (Bytes.Length == 7)
+            {
+               
+                string results_6 = Bytes.Substring(6, 1);
+                string results_5 = Bytes.Substring(5, 1);
+                string results_4 = Bytes.Substring(4, 1);
+                string results_3 = Bytes.Substring(3, 1);
+                string results_2 = Bytes.Substring(2, 1);
+                string results_1 = Bytes.Substring(1, 1);
+                string capture = Bytes.Substring(2, 5);
+                string result =Bytes.Substring(0,7);
+                string Last = Bytes.Substring(0, 1);
+                string Last2 = Bytes.Substring( 1, 1);
+                string test2 = Bytes.Substring(0, 2);
+                string secondToLast =Bytes.Substring( 1, 2);
 
+                string thirdToLast = Bytes.Substring(3, 2);
+                string FourthToLast = Bytes.Substring(5, 2);
+                
+                string happy;
+                int mathfunction = Convert.ToInt32(result, 16);
+                int test = Convert.ToInt32(test2, 16);
+                int mathsolve = 0;
+
+                if (Bytes.StartsWith("B0"))
+                {
+                    happy =  results_6 + results_5 + results_4 + results_3 + results_2;
+                    
+                    hex = Convert.ToInt32(happy, 10) ;
+                    hex -= Bin_fix(capture);
+                     mathsolve = (mathfunction - 184548397);
+
+                }
+                else if(Bytes.StartsWith("B1"))
+                {
+                    string test1 = Bytes.Substring(2, 4);
+                    hex = Convert.ToInt32(test1, 16);
+                    mathsolve = (mathfunction - 185613327);
+                }
+               
+
+
+                var tester = (int)ReverseBytes((uint)hex);
+                return mathsolve;
+            }
+           
+            return hex;
+        }
 
     }
 }

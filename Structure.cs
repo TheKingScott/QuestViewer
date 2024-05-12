@@ -102,13 +102,13 @@ namespace QuestEditor_V2
         {
             Helpers helper = new Helpers();
             Bin.Write(node.m_nActType);
-           Bin.Write(helper.ByteExpand64(node.m_strActSub));
-           Bin.Write(helper.ByteExpand64(node.m_strActSub2));
-           Bin.Write(helper.ByteExpand64(node.m_strActArea));
-           Bin.Write(node.m_nReqAct);
-           Bin.Write(node.m_nSetCntPro_100);
-           Bin.Write(helper.ByteExpand64(node.m_strLinkQuestItem));
-           Bin.Write(node.m_nOrder);
+            Bin.Write(helper.ByteExpand64(node.m_strActSub));
+            Bin.Write(helper.ByteExpand64(node.m_strActSub2));
+            Bin.Write(helper.ByteExpand64(node.m_strActArea));
+            Bin.Write(node.m_nReqAct);
+            Bin.Write(node.m_nSetCntPro_100);
+            Bin.Write(helper.ByteExpand64(node.m_strLinkQuestItem));
+            Bin.Write(node.m_nOrder);
         }
 
         public _quest_reward_item Read_Quest_Reward_Item(BinaryReader Bin)
@@ -194,7 +194,7 @@ namespace QuestEditor_V2
             header.m_RewardItem[5] = Read_Quest_Reward_Item(Bin);
             header.m_RewardMastery = new _quest_reward_mastery[2];
             header.m_RewardMastery[0] = Read_Quest_Reward_Mastery(Bin);
-            header.m_RewardMastery[1] = Read_Quest_Reward_Mastery(Bin);      
+            header.m_RewardMastery[1] = Read_Quest_Reward_Mastery(Bin);
             header.m_strConsSkillCode = Bin.ReadBytes(64);//64
             header.m_nConsSkillCnt = Bin.ReadInt32();
             header.m_strConsForceCode = Bin.ReadBytes(64);//64
@@ -209,8 +209,8 @@ namespace QuestEditor_V2
             header.m_QuestFailCond = new _quest_fail_condition[3];
             header.m_QuestFailCond[0] = Read_Quest_Fail_Condition(Bin);
             header.m_QuestFailCond[1] = Read_Quest_Fail_Condition(Bin);
-            header.m_QuestFailCond[2] = Read_Quest_Fail_Condition(Bin);      
-            
+            header.m_QuestFailCond[2] = Read_Quest_Fail_Condition(Bin);
+
             header.m_strFailBriefCode = Bin.ReadBytes(64);//64
             header.m_nLinkDummyCond = Bin.ReadInt32();
             header.m_strLinkDummyCode = Bin.ReadBytes(64);//64
@@ -226,63 +226,63 @@ namespace QuestEditor_V2
         public void Write_Quest_Fld(BinaryWriter Bin, _Quest_fld Quest)
         {
             Helpers helper = new Helpers();
-           Bin.Write(Quest.m_dwIndex);
-           Bin.Write(helper.ByteExpand64(Quest.m_strCode));
-           Bin.Write(Quest.m_nLimLv);
-           Bin.Write(Quest.m_nQuestType);
-           Bin.Write(Quest.m_bQuestRepeat);
-           Bin.Write(Quest.m_dRepeatTime); //8 bits
-           Bin.Write(Quest.m_nDifficultyLevel);
-           Bin.Write(Quest.m_n2);
-           Bin.Write(Quest.m_bSelectQuestMenual);
-           Bin.Write(Quest.m_bCompQuestType);
+            Bin.Write(Quest.m_dwIndex);
+            Bin.Write(helper.ByteExpand64(Quest.m_strCode));
+            Bin.Write(Quest.m_nLimLv);
+            Bin.Write(Quest.m_nQuestType);
+            Bin.Write(Quest.m_bQuestRepeat);
+            Bin.Write(Quest.m_dRepeatTime); //8 bits
+            Bin.Write(Quest.m_nDifficultyLevel);
+            Bin.Write(Quest.m_n2);
+            Bin.Write(Quest.m_bSelectQuestMenual);
+            Bin.Write(Quest.m_bCompQuestType);
 
-           Write_Action_Node(Bin, Quest.m_ActionNode[0]);
-           Write_Action_Node(Bin, Quest.m_ActionNode[1]);
-           Write_Action_Node(Bin, Quest.m_ActionNode[2]);         
-           
-           Bin.Write(Quest.m_nMaxLevel);
-           Bin.Write(Quest.m_dConsExp); //8 bits
-           Bin.Write(Quest.m_nConsContribution);
-           Bin.Write(Quest.m_nConsDalant);
-           Bin.Write(Quest.m_nConspvppoint);
-           Bin.Write(Quest.m_nConsGold);
-           Bin.Write(Quest.m_bSelectConsITMenual);
+            Write_Action_Node(Bin, Quest.m_ActionNode[0]);
+            Write_Action_Node(Bin, Quest.m_ActionNode[1]);
+            Write_Action_Node(Bin, Quest.m_ActionNode[2]);
 
-           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[0]);
-           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[1]);
-           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[2]);
-           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[3]);
-           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[4]);
-           Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[5]);
+            Bin.Write(Quest.m_nMaxLevel);
+            Bin.Write(Quest.m_dConsExp); //8 bits
+            Bin.Write(Quest.m_nConsContribution);
+            Bin.Write(Quest.m_nConsDalant);
+            Bin.Write(Quest.m_nConspvppoint);
+            Bin.Write(Quest.m_nConsGold);
+            Bin.Write(Quest.m_bSelectConsITMenual);
 
-           Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[0]);
-           Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[1]);
-            
-           Bin.Write(helper.ByteExpand64(Quest.m_strConsSkillCode));//64
-           Bin.Write(Quest.m_nConsSkillCnt);
-           Bin.Write(helper.ByteExpand64(Quest.m_strConsForceCode));//64
-           Bin.Write(Quest.m_nConsForceCnt);
-           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_0));//64
-           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_1));//64
-           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_2));//64
-           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_3));//64
-           Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_4));//64
-           Bin.Write(Quest.m_nLinkQuestGroupID);
-           Bin.Write(Quest.m_bFailCheck);
+            Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[0]);
+            Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[1]);
+            Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[2]);
+            Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[3]);
+            Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[4]);
+            Write_Quest_Reward_Item(Bin, Quest.m_RewardItem[5]);
 
-           Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[0]);
-           Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[1]);
-           Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[2]);
+            Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[0]);
+            Write_Quest_Reward_Mastery(Bin, Quest.m_RewardMastery[1]);
 
-           Bin.Write(helper.ByteExpand64(Quest.m_strFailBriefCode));//64
-           Bin.Write(Quest.m_nLinkDummyCond);
-           Bin.Write(helper.ByteExpand64(Quest.m_strLinkDummyCode));//64
-           Bin.Write(helper.ByteExpand64(Quest.m_strFailLinkQuest));//64
-           Bin.Write(Quest.m_nViewportType);
-           Bin.Write(helper.ByteExpand64(Quest.m_strViewportCode));//64
-           Bin.Write(Quest.m_nStore_trade);
-           Bin.Write(helper.ByteExpand64(Quest.m_txtQTExp));
+            Bin.Write(helper.ByteExpand64(Quest.m_strConsSkillCode));//64
+            Bin.Write(Quest.m_nConsSkillCnt);
+            Bin.Write(helper.ByteExpand64(Quest.m_strConsForceCode));//64
+            Bin.Write(Quest.m_nConsForceCnt);
+            Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_0));//64
+            Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_1));//64
+            Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_2));//64
+            Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_3));//64
+            Bin.Write(helper.ByteExpand64(Quest.m_strLinkQuest_4));//64
+            Bin.Write(Quest.m_nLinkQuestGroupID);
+            Bin.Write(Quest.m_bFailCheck);
+
+            Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[0]);
+            Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[1]);
+            Write_Quest_Fail_Condition(Bin, Quest.m_QuestFailCond[2]);
+
+            Bin.Write(helper.ByteExpand64(Quest.m_strFailBriefCode));//64
+            Bin.Write(Quest.m_nLinkDummyCond);
+            Bin.Write(helper.ByteExpand64(Quest.m_strLinkDummyCode));//64
+            Bin.Write(helper.ByteExpand64(Quest.m_strFailLinkQuest));//64
+            Bin.Write(Quest.m_nViewportType);
+            Bin.Write(helper.ByteExpand64(Quest.m_strViewportCode));//64
+            Bin.Write(Quest.m_nStore_trade);
+            Bin.Write(helper.ByteExpand64(Quest.m_txtQTExp));
         }
         public string _Action_Node_m_nActTypes(int mActType)
         {
@@ -536,7 +536,7 @@ namespace QuestEditor_V2
             item.m_CondNode[2] = Read_happen_event_condition_node(Bin);
             item.m_CondNode[3] = Read_happen_event_condition_node(Bin);
             item.m_CondNode[4] = Read_happen_event_condition_node(Bin);
-            
+
             item.m_strLinkQuest_0 = Bin.ReadBytes(64);
             item.m_strLinkQuest_1 = Bin.ReadBytes(64);
             item.m_strLinkQuest_2 = Bin.ReadBytes(64);
@@ -618,33 +618,88 @@ namespace QuestEditor_V2
             QuestTextCode header = new QuestTextCode();
             header.m_dwIndex = Bin.ReadInt32();
             header.m_strCode_0 = Bin.ReadBytes(64);
-            header.m_strQuestBriefContents_0= Bin.ReadBytes(64);
-            header.m_strQuestBriefContents_1= Bin.ReadBytes(64);
-            header.m_strQuestBriefContents_2= Bin.ReadBytes(64);
-            header.m_strQuestBriefContents_3= Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_0 = Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_1 = Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_2 = Bin.ReadBytes(64);
+            header.m_strQuestBriefContents_3 = Bin.ReadBytes(64);
             header.m_strQuestBriefContents_4 = Bin.ReadBytes(64);
-            header.m_strQuestSummaryContents_0= Bin.ReadBytes(64);
-            header.m_strQuestSummaryContents_1= Bin.ReadBytes(64);
-            header.m_strQuestSummaryContents_2= Bin.ReadBytes(64);
-            header.m_strQuestSummaryContents_3= Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_0 = Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_1 = Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_2 = Bin.ReadBytes(64);
+            header.m_strQuestSummaryContents_3 = Bin.ReadBytes(64);
             header.m_strQuestSummaryContents_4 = Bin.ReadBytes(64);
-            header.m_strQuestConditionResult_0= Bin.ReadBytes(64);
-            header.m_strQuestConditionResult_1= Bin.ReadBytes(64);
-            header.m_strQuestConditionResult_2= Bin.ReadBytes(64);
-            header.m_strQuestConditionResult_3= Bin.ReadBytes(64);
-            header.m_strQuestConditionResult_4= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_U0= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_U1= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_U2= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_U3= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_U4= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_F0= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_F1= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_F2= Bin.ReadBytes(64);
-            header.m_strQuestFinishContents_F3= Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_0 = Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_1 = Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_2 = Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_3 = Bin.ReadBytes(64);
+            header.m_strQuestConditionResult_4 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U0 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U1 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U2 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U3 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_U4 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F0 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F1 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F2 = Bin.ReadBytes(64);
+            header.m_strQuestFinishContents_F3 = Bin.ReadBytes(64);
             header.m_strQuestFinishContents_F4 = Bin.ReadBytes(64);
 
             return header;
+        }
+
+
+        public struct QuestTextNumbers
+        {
+            public string QuestNameIndex;
+            public int QuestNameNumber;
+
+            public int m_strQuestBriefContents_0;//
+            public int m_strQuestBriefContents_1;//
+            public int m_strQuestBriefContents_2;//
+            public int m_strQuestBriefContents_3;//
+            public int m_strQuestBriefContents_4;//
+            public int m_strQuestSummaryContents_0;
+            public int m_strQuestSummaryContents_1;
+            public int m_strQuestSummaryContents_2;
+            public int m_strQuestSummaryContents_3;
+            public int m_strQuestSummaryContents_4;
+            public int m_strQuestConditionResult_0;//
+            public int m_strQuestConditionResult_1;//
+            public int m_strQuestConditionResult_2;//
+            public int m_strQuestConditionResult_3;//
+            public int m_strQuestConditionResult_4;//
+            public int m_strQuestFinishContents_U0;
+            public int m_strQuestFinishContents_U1;
+            public int m_strQuestFinishContents_U2;
+            public int m_strQuestFinishContents_U3;
+            public int m_strQuestFinishContents_U4;
+            public int m_strQuestFinishContents_F0;
+            public int m_strQuestFinishContents_F1;
+            public int m_strQuestFinishContents_F2;
+            public int m_strQuestFinishContents_F3;
+            public int m_strQuestFinishContents_F4;
+
+            public int[] Client_IsFailCheck;
+        }
+
+        public struct QuestItems
+        {
+            public int m_dwIndex;
+            public byte[] m_strID;
+            public int Unknown;
+            public byte[] m_strName;
+        }
+
+        public QuestItems Read_QuestItems(BinaryReader Bin)
+        {
+            QuestItems header = new QuestItems();
+            header.m_dwIndex = Bin.ReadInt32();
+            header.m_strID = Bin.ReadBytes(64);
+            header.Unknown = Bin.ReadInt32();
+            header.m_strName = Bin.ReadBytes(64);
+
+            return header;
+
         }
     }
 }

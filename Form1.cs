@@ -106,16 +106,21 @@ namespace QuestEditor_V2
             var List1 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestDummyEvent.dat");
             var List2 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestNPCEvent.dat");
             var List3 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestKillOtherRaceEvent.dat");
-            var List4 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestLvUpEvent.dat");
-            var List5 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestPromoteEvent.dat");
-            var List6 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestMasteryEvent.dat");
-            var List7 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestLvLimitEvent.dat");
-            var List8 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestGradeEvent.dat");
-            var List9 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestGainItemEvent.dat");
+            var List4 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestLvUpEvent.dat");//data bugged
+            var List5 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestPromoteEvent.dat"); //data bugged
+            var List6 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestGradeEvent.dat"); //correct
+            var List7 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestGainItemEvent.dat");
+            var List8 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestMasteryEvent.dat"); //data bugged only 2 classes           
+            var List9 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestLvLimitEvent.dat"); //data bugged only 2 classes  
 
-            var list10 = myQuest_fld.ReadFile_Quest_fld("Quest.dat");
-            var list11 = myQuest_fld.ReadFile_Quest_fld("HolyStoneKeepperQuest.dat");
-            var test = 0;
+            var List10 = myQuest_fld.ReadFile_Quest_fld("Quest.dat");
+            var List11 = myQuest_fld.ReadFile_Quest_fld("HolyStoneKeepperQuest.dat");
+
+
+            myQuest_fld.PrepareQuestServerSide();
+
+            myQuest_fld.Build_ClientQUestValues();
+
             System.IO.Directory.CreateDirectory("Client_Files");
             string fileName = "quest.dat";
             string path = Path.Combine(Environment.CurrentDirectory, @"Client_Files\", fileName);
@@ -127,23 +132,23 @@ namespace QuestEditor_V2
                 {
                     bin.Write(List1.Length);
                     bin.Write(336);
-                    foreach(var quest in List1)
+                    foreach (var quest in List1)
                     {
-                       myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestDummyEvent(bin,quest);
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestDummyEvent(bin, quest);
                     }
                     bin.Write(List2.Length);
                     bin.Write(336);
                     foreach (var quest in List2)
                     {
                         myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestNPCEvent(bin, quest);
-                    }                   
+                    }
                     bin.Write(List3.Length);
                     bin.Write(336);
                     foreach (var quest in List3)
                     {
                         myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestKillOtherRaceEvent(bin, quest);
                     }
-                    //testing need to fix values such as BWB0 to int
+
                     bin.Write(List4.Length);
                     bin.Write(336);
                     foreach (var quest in List4)
@@ -151,6 +156,54 @@ namespace QuestEditor_V2
                         myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestLvUpEvent(bin, quest);
                     }
 
+                    bin.Write(List5.Length);
+                    bin.Write(336);
+                    foreach (var quest in List5)
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestPromoteEvent(bin, quest);
+                    }
+
+                    bin.Write(List6.Length);
+                    bin.Write(336);
+                    foreach (var quest in List6)
+                    {
+
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestGradeEvent(bin, quest); //correect
+
+                    }
+
+                    bin.Write(List7.Length);
+                    bin.Write(336);
+                    foreach (var quest in List7)
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestGainItemEvent(bin, quest);
+
+                    }
+
+                    bin.Write(List8.Length);
+                    bin.Write(336);
+                    foreach (var quest in List8)
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestMasteryEvent(bin, quest);
+                    }
+
+                    bin.Write(List9.Length);
+                    bin.Write(336);
+                    foreach (var quest in List9)//
+                    {
+                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestLvLimitEvent(bin, quest);
+                    }
+                    
+                     bin.Write(List10.Length);
+                     bin.Write(424);
+                    int questcount = 0;
+                     foreach (var quest in List10)
+                     {
+                         myQuest_fld.Write_Client__Quest_fld(bin, quest, questcount);//todo fix the missing values
+                        questcount++;
+                     }
+                    bin.Dispose();
+                    bin.Close();
                 }
             }
 
@@ -169,7 +222,7 @@ namespace QuestEditor_V2
         private void button12_Click(object sender, EventArgs e)
         {
             Helpers help = new Helpers();
-           var test = help.Client_Hex("iyqla14");
+            var test = help.Client_Hex("tibp001");
             System.IO.Directory.CreateDirectory("Client_Files");
             string fileName = "TestFile.dat";
             string path = Path.Combine(Environment.CurrentDirectory, @"Client_Files\", fileName);
@@ -183,7 +236,7 @@ namespace QuestEditor_V2
                     bin.Write(test);
                 }
             }
-                   // string test2 = help.Client_Hex("iyqst02");
+            // string test2 = help.Client_Hex("iyqst02");
             //iyqst01
             //iyqst02
             //iyqst03
@@ -211,6 +264,13 @@ namespace QuestEditor_V2
             //iyqla78
 
 
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            var myForm = new Debug_Client();
+           // myForm.ReadFile("QuestPromoteEvent.dat");//read
+            myForm.Show();
         }
     }
 }

@@ -43,7 +43,9 @@
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
             button12 = new Button();
+            button13 = new Button();
             groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -188,6 +190,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(button13);
             groupBox2.Location = new Point(12, 169);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(633, 129);
@@ -205,6 +208,16 @@
             button12.UseVisualStyleBackColor = true;
             button12.Click += button12_Click;
             // 
+            // button13
+            // 
+            button13.Location = new Point(11, 22);
+            button13.Name = "button13";
+            button13.Size = new Size(115, 23);
+            button13.TabIndex = 0;
+            button13.Text = "Quest.dat READ";
+            button13.UseVisualStyleBackColor = true;
+            button13.Click += button13_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -217,6 +230,7 @@
             Name = "Form1";
             Text = "Quest Viewer";
             groupBox1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -237,5 +251,6 @@
         private GroupBox groupBox1;
         private GroupBox groupBox2;
         private Button button12;
+        private Button button13;
     }
 }
