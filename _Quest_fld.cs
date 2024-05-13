@@ -43,6 +43,7 @@ namespace QuestEditor_V2
         List<QuestTextNumbers> DataPile = new List<QuestTextNumbers>(); //client data ints for export
         NameValueCollection QuestItem_KV_List = new NameValueCollection(); //clientdataExport
         List<QuestItems> QuestItem;
+        Helpers help = new Helpers();
         public _Quest_fld()
         {
             InitializeComponent();
@@ -415,9 +416,9 @@ namespace QuestEditor_V2
             }
             int hello = 0;
         }
-        public void Write_Client__Quest_fld(BinaryWriter Bin, Structure._Quest_fld Quest, int QuestIndex)
+        public void Write_Client__Quest_fld(BinaryWriter Bin, Structure._Quest_fld Quest)
         {
-            Helpers help = new Helpers();
+            Bin.Flush();
             Bin.Write(Quest.m_dwIndex);
             string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
             string purge0 = ID0.Replace("\0", string.Empty);
@@ -474,8 +475,8 @@ namespace QuestEditor_V2
                
                 Bin.Write(Quest.m_ActionNode[i].m_nReqAct);  //AD
 
-                Bin.Write(DataPile[QuestIndex].m_strQuestConditionResult_0);  //AE
-                Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U0);
+                Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestConditionResult_0);  //AE
+                Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_U0);
                 
 
                 string IDN4 = Encoding.UTF8.GetString(Quest.m_ActionNode[i].m_strLinkQuestItem, 0, Quest.m_ActionNode[i].m_strLinkQuestItem.Length);
@@ -553,18 +554,18 @@ namespace QuestEditor_V2
             Bin.Write(helperint2);
             Bin.Write(Quest.m_nConsForceCnt);
             ///BW m_strQuestFinishContents_F0
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F0);  //BX
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F1);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F2);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F3);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_F4);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_F0);  //BX
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_F1);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_F2);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_F3);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_F4);
 
             //double check this section it may be wrong
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U0);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U1);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U2);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U3);
-            Bin.Write(DataPile[QuestIndex].m_strQuestFinishContents_U4);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_U0);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_U1);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_U2);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_U3);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestFinishContents_U4);
             //end of double check section
             
            // 308
@@ -600,22 +601,22 @@ namespace QuestEditor_V2
             Bin.Write(str_4);
             Bin.Write(str_4);  //CP
 
-            Bin.Write(DataPile[QuestIndex].QuestNameNumber);
-            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_0);
-            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_1);
-            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_2);
-            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_3);
-            Bin.Write(DataPile[QuestIndex].m_strQuestBriefContents_4);            
-            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_0);
-            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_1);
-            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_2);
-            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_3);
-            Bin.Write(DataPile[QuestIndex].m_strQuestSummaryContents_4);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].QuestNameNumber);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestBriefContents_0);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestBriefContents_1);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestBriefContents_2);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestBriefContents_3);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestBriefContents_4);            
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestSummaryContents_0);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestSummaryContents_1);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestSummaryContents_2);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestSummaryContents_3);
+            Bin.Write(DataPile[(int)Quest.m_dwIndex].m_strQuestSummaryContents_4);
            
             Bin.Write(Quest.m_nStore_trade); //396
             for (int i = 0; i < 3; i++)
             {
-                Bin.Write(DataPile[QuestIndex].Client_IsFailCheck[i]);
+                Bin.Write(DataPile[(int)Quest.m_dwIndex].Client_IsFailCheck[i]);
                 Bin.Write(Quest.m_QuestFailCond[i].m_nFailCondition);
 
                 string IDF = Encoding.UTF8.GetString(Quest.m_QuestFailCond[i].m_strFailCode, 0, Quest.m_QuestFailCond[i].m_strFailCode.Length);
@@ -640,8 +641,10 @@ namespace QuestEditor_V2
             Bin.Write(m_strViewportCode);           
             Bin.Write(0);
             Bin.Write(FailLinkQuest);
-
-          
+           
+            //string test = "this is a test of error check";
+            
+            //Bin.Write(test);
             
 
         }

@@ -22,6 +22,7 @@ namespace QuestEditor_V2
         NameValueCollection Quest_KV_List = new NameValueCollection();
         int Index = 0;
         string OpenFile;
+        Helpers help = new Helpers();
         public QuestHappenEvent()
         {
             InitializeComponent();
@@ -30,8 +31,8 @@ namespace QuestEditor_V2
         //somewhere there is a missmatch
         public void Write_Client_QuestHappenEvent_QuestGainItemEvent(BinaryWriter Bin, Structure._QuestHappenEvent_fld Quest)
         {
-            Helpers help = new Helpers();
-
+            
+            Bin.Flush();
             Bin.Write(Quest.m_dwIndex); //0
             string ID0 = Encoding.UTF8.GetString(Quest.m_strCode, 0, Quest.m_strCode.Length);
             string purge0 = ID0.Replace("\0", string.Empty);
@@ -101,6 +102,7 @@ namespace QuestEditor_V2
                 Bin.Write(str_4);//112
                 Bin.Write(str_4);
 
+               
             }
         }
 

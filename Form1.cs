@@ -130,6 +130,7 @@ namespace QuestEditor_V2
             {
                 using (var bin = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
+                    
                     bin.Write(List1.Length);
                     bin.Write(336);
                     foreach (var quest in List1)
@@ -194,19 +195,24 @@ namespace QuestEditor_V2
                         myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestLvLimitEvent(bin, quest);
                     }
                     
+                    
                      bin.Write(List10.Length);
                      bin.Write(424);
-                    int questcount = 0;
+                    
                      foreach (var quest in List10)
                      {
-                         myQuest_fld.Write_Client__Quest_fld(bin, quest, questcount);//todo fix the missing values
-                        questcount++;
+                         myQuest_fld.Write_Client__Quest_fld(bin, quest);//todo fix the missing values
+                       
                      }
                     bin.Dispose();
                     bin.Close();
+                    MessageBox.Show("end of write has happened");
+                    myQuest_fld.Dispose();
+                    myQuestHappenEvent.Dispose();
                 }
             }
-
+            myQuest_fld.Close();
+            myQuestHappenEvent.Close();
             /* Helpers help = new Helpers();
              int writeme = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes("Q304500"));
              int writeme2 = help.Hex_ServerCodeToClient(Encoding.UTF8.GetBytes("-1"));
