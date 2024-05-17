@@ -14,6 +14,24 @@ namespace QuestEditor_V2
         {
             return (Encoding.UTF8.GetString(Bytes, 0, Bytes.Length)).Replace("\0", string.Empty);
         }
+
+        public byte[] ByteExpand40(byte[] Bytes)
+        {
+            byte[] holder = new byte[40];
+            for (int i = 0; i < 40; i++)
+            {
+                if (i < Bytes.Length)
+                {
+                    holder[i] = Bytes[i];
+                }
+                else
+                {
+                    holder[i] = 0;
+                }
+            }
+            return holder;
+        }
+
         public byte[] ByteExpand64(byte[] Bytes)
         {
             byte[] holder = new byte[64];

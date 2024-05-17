@@ -701,5 +701,14 @@ namespace QuestEditor_V2
             return header;
 
         }
+
+        public void Write_QuestItems(BinaryWriter Bin, QuestItems item)
+        {
+            Helpers helper = new Helpers();
+            Bin.Write(item.m_dwIndex);
+            Bin.Write(helper.ByteExpand40(item.m_strName));
+           
+        }
+
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static QuestEditor_V2.Structure;
 
 namespace QuestEditor_V2
 {
@@ -102,7 +103,7 @@ namespace QuestEditor_V2
         {
             var myQuest_fld = new _Quest_fld();
             var myQuestHappenEvent = new QuestHappenEvent();
-
+            var Structure = new Structure();
             var List1 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestDummyEvent.dat");
             var List2 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestNPCEvent.dat");
             var List3 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestKillOtherRaceEvent.dat");
@@ -110,8 +111,8 @@ namespace QuestEditor_V2
             var List5 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestPromoteEvent.dat"); //data bugged
             var List6 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestGradeEvent.dat"); //correct
             var List7 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestGainItemEvent.dat");
-            var List8 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestMasteryEvent.dat"); //data bugged only 2 classes           
-            var List9 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestLvLimitEvent.dat"); //data bugged only 2 classes  
+           // var List8 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestMasteryEvent.dat"); //not written          
+           // var List9 = myQuestHappenEvent.ReadFile_QuestHappenEvent_fld("QuestLvLimitEvent.dat"); //not written
 
             var List10 = myQuest_fld.ReadFile_Quest_fld("Quest.dat");
             var List11 = myQuest_fld.ReadFile_Quest_fld("HolyStoneKeepperQuest.dat");
@@ -130,7 +131,7 @@ namespace QuestEditor_V2
             {
                 using (var bin = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
-                    
+
                     bin.Write(List1.Length);
                     bin.Write(336);
                     foreach (var quest in List1)
@@ -181,36 +182,50 @@ namespace QuestEditor_V2
 
                     }
 
-                    bin.Write(List8.Length);
-                    bin.Write(336);
-                    foreach (var quest in List8)
+                    /* bin.Write(List8.Length);
+                     bin.Write(336);
+                     foreach (var quest in List8)
+                     {
+                         myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestMasteryEvent(bin, quest);
+                     }
+
+                     bin.Write(List9.Length);
+                     bin.Write(336);
+                     foreach (var quest in List9)//
+                     {
+                         myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestLvLimitEvent(bin, quest);
+                     }
+                     bin.Dispose();
+                     bin.Close();
+                    */
+
+                    bin.Write(List10.Length + List11.Length);
+                    bin.Write(424);
+
+                    foreach (var quest in List10)
                     {
-                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestMasteryEvent(bin, quest);
+                        myQuest_fld.Write_Client_Quest(bin, quest);                    
+                    }
+                    foreach (var quest in List11)
+                    {
+                        myQuest_fld.Write_Client_HolyStoneKeepperQuest(bin, quest);   //todo fix the error                 
                     }
 
-                    bin.Write(List9.Length);
-                    bin.Write(336);
-                    foreach (var quest in List9)//
+                    bin.Write(myQuest_fld.QuestItem.Count);
+                    bin.Write(44);
+
+                    foreach(var item in myQuest_fld.QuestItem)
                     {
-                        myQuestHappenEvent.Write_Client_QuestHappenEvent_QuestLvLimitEvent(bin, quest);
+                        Structure.Write_QuestItems(bin, item);
                     }
-                    
-                    
-                     bin.Write(List10.Length);
-                     bin.Write(424);
-                    
-                     foreach (var quest in List10)
-                     {
-                         myQuest_fld.Write_Client__Quest_fld(bin, quest);//todo fix the missing values
-                       
-                     }
-                    bin.Dispose();
-                    bin.Close();
+                    myQuest_fld.Write_QuestOrderLookUp(bin);
+
                     MessageBox.Show("end of write has happened");
-                    myQuest_fld.Dispose();
-                    myQuestHappenEvent.Dispose();
                 }
             }
+            
+            myQuest_fld.Dispose();
+            myQuestHappenEvent.Dispose();
             myQuest_fld.Close();
             myQuestHappenEvent.Close();
             /* Helpers help = new Helpers();
