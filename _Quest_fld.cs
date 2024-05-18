@@ -61,30 +61,41 @@ namespace QuestEditor_V2
 
         public void Write_QuestOrderLookUp(BinaryWriter Bin)
         {
-            Bin.Write(BellQuestOrder.Count);
+            Bin.Write(BellQuestOrder.Count+3);
             Bin.Write(4);
             for (int i = 0; i < BellQuestOrder.Count; i++)
             {
                 int x = Int32.Parse(BellQuestOrder.Get(i));
                 Bin.Write(x);               
             }
+            //Holystonekeeper quests?
+            Bin.Write(-268435456);
+            Bin.Write(-268435453);
+            Bin.Write(-268435450);
 
-            Bin.Write(CoraQuestOrder.Count);
+            Bin.Write(CoraQuestOrder.Count+3);
             Bin.Write(4);
             for (int i = 0; i < CoraQuestOrder.Count; i++)
             {
                 int x = Int32.Parse(CoraQuestOrder.Get(i));
                 Bin.Write(x);
             }
-            Bin.Write(AccQuestOrder.Count);
+            //Holystonekeeper quests?
+            Bin.Write(-268435455);
+            Bin.Write(-268435452);
+            Bin.Write(-268435449);
+
+            Bin.Write(AccQuestOrder.Count+3);
             Bin.Write(4);
             for (int i = 0; i < AccQuestOrder.Count; i++)
             {
                 int x = Int32.Parse(AccQuestOrder.Get(i));
                 Bin.Write(x);
             }
-
-
+            //Holystonekeeper quests?
+            Bin.Write(-268435454);
+            Bin.Write(-268435451);
+            Bin.Write(-268435448);
         }
         public void Build_ClientQUestValues()
         {
@@ -939,6 +950,14 @@ namespace QuestEditor_V2
                             BellQuestOrder0.Add(purge0, QuestEdit[i].m_dwIndex.ToString()); 
 
                         }
+                        else if(QuestEdit[i].m_bQuestRepeat == 1)
+                        {
+                            BellQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
+                        }
+                        else if (QuestEdit[i].m_nConsContribution > 0)
+                        {
+                            BellQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
+                        }
                         else
                         {
                             string[] tester = BellQuestOrder0.GetValues(purge1);
@@ -967,6 +986,14 @@ namespace QuestEditor_V2
                             CoraQuestOrder0.Add(purge0, QuestEdit[i].m_dwIndex.ToString());
 
                         }
+                        else if (QuestEdit[i].m_bQuestRepeat == 1)
+                        {
+                            CoraQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
+                        }
+                        else if (QuestEdit[i].m_nConsContribution > 0)
+                        {
+                            CoraQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
+                        }
                         else
                         {
                             string[] tester = CoraQuestOrder0.GetValues(purge1);
@@ -991,6 +1018,14 @@ namespace QuestEditor_V2
                             AccQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
                             AccQuestOrder0.Add(purge0, QuestEdit[i].m_dwIndex.ToString());
 
+                        }
+                        else if (QuestEdit[i].m_bQuestRepeat == 1)
+                        {
+                            AccQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
+                        }
+                        else if (QuestEdit[i].m_nConsContribution > 0)
+                        {
+                            AccQuestOrder.Add(purge1, QuestEdit[i].m_dwIndex.ToString());
                         }
                         else
                         {
