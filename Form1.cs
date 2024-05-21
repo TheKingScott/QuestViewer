@@ -242,48 +242,9 @@ namespace QuestEditor_V2
 
         private void button12_Click(object sender, EventArgs e)
         {
-            Helpers help = new Helpers();
-            var test = help.Client_Hex("tibp001");
-            System.IO.Directory.CreateDirectory("Client_Files");
-            string fileName = "TestFile.dat";
-            string path = Path.Combine(Environment.CurrentDirectory, @"Client_Files\", fileName);
-
-
-            using (var stream = File.Open(path, FileMode.Create))
-            {
-                using (var bin = new BinaryWriter(stream, Encoding.UTF8, false))
-                {
-                    //byte[] bytes = Encoding.UTF8.GetBytes(test);
-                    bin.Write(test);
-                }
-            }
-            // string test2 = help.Client_Hex("iyqst02");
-            //iyqst01
-            //iyqst02
-            //iyqst03
-            //iyqst04
-            //iyqst05
-            //iyqst06
-            //iyqst07
-            //iyqst08
-            //iyqst09
-            //iyqst10
-            //iyqsa02
-            //iyqsa07
-            //iyqsa08
-            //iyqsa09
-            //iyqla10
-            //iyqla14
-            //iyqla20
-            //iyqla28
-            //iyqla42
-            //iyqla47
-            //iyqla51
-            //iyqla56
-            //iyqla61
-            //iyqla76
-            //iyqla78
-
+            ND_Quest texts = new ND_Quest();
+            texts.Write_NDQUEST();
+            MessageBox.Show("end of write has happened");
 
         }
 

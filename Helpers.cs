@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics.Eventing.Reader;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace QuestEditor_V2
 {
@@ -13,6 +14,23 @@ namespace QuestEditor_V2
         public string ByteString(byte[] Bytes)
         {
             return (Encoding.UTF8.GetString(Bytes, 0, Bytes.Length)).Replace("\0", string.Empty);
+        }
+
+        public byte[] ByteExpand32(byte[] Bytes)
+        {
+            byte[] holder = new byte[32];
+            for (int i = 0; i < 32; i++)
+            {
+                if (i < Bytes.Length)
+                {
+                    holder[i] = Bytes[i];
+                }
+                else
+                {
+                    holder[i] = 0;
+                }
+            }
+            return holder;
         }
 
         public byte[] ByteExpand40(byte[] Bytes)
@@ -520,6 +538,53 @@ namespace QuestEditor_V2
             }
            
             return hex;
+        }
+
+        public int NDQUest_Hex(string Bytes)
+        {
+            int test = 0;
+            if (Bytes.Length == 7)
+            {
+                string result = Bytes.Substring(1, 6);
+                if(Bytes.StartsWith("Q") == true) //QuestName values
+                {
+                    string value = string.Format("{0}{1}", 10, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+                if (Bytes.StartsWith("B") == true) //QuestBrief values
+                {
+                    string value = string.Format("{0}{1}", 1, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+                if (Bytes.StartsWith("S") == true) // QuestSummary values
+                {
+                    string value = string.Format("{0}{1}", 12, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+                if (Bytes.StartsWith("R") == true) // QuestCondition values
+                {
+                    string value = string.Format("{0}{1}", 2, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+                if (Bytes.StartsWith("Somevalue") == true) // missing section values
+                {
+                    string value = string.Format("{0}{1}", 11, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+                if (Bytes.StartsWith("U") == true) // QuestFinish values
+                {
+                    string value = string.Format("{0}{1}", 14, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+                if (Bytes.StartsWith("F") == true) // Questfinish values
+                {
+                    string value = string.Format("{0}{1}", 5, result);
+                    test = Convert.ToInt32(value, 16);
+                }
+
+            }
+
+                return test;
         }
 
     }

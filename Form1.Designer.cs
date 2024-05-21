@@ -42,10 +42,12 @@
             Generate_Client = new Button();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
-            button12 = new Button();
             button13 = new Button();
+            button12 = new Button();
+            groupBox3 = new GroupBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -160,11 +162,11 @@
             // 
             // Generate_Client
             // 
-            Generate_Client.Location = new Point(668, 34);
+            Generate_Client.Location = new Point(10, 22);
             Generate_Client.Name = "Generate_Client";
             Generate_Client.Size = new Size(106, 23);
             Generate_Client.TabIndex = 11;
-            Generate_Client.Text = "Generate_Client";
+            Generate_Client.Text = "Gen-Quest";
             Generate_Client.UseVisualStyleBackColor = true;
             Generate_Client.Click += TestValue_Click;
             // 
@@ -198,16 +200,6 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Client Files";
             // 
-            // button12
-            // 
-            button12.Location = new Point(685, 186);
-            button12.Name = "button12";
-            button12.Size = new Size(75, 23);
-            button12.TabIndex = 15;
-            button12.Text = "button12";
-            button12.UseVisualStyleBackColor = true;
-            button12.Click += button12_Click;
-            // 
             // button13
             // 
             button13.Location = new Point(11, 22);
@@ -218,19 +210,40 @@
             button13.UseVisualStyleBackColor = true;
             button13.Click += button13_Click;
             // 
+            // button12
+            // 
+            button12.Location = new Point(10, 51);
+            button12.Name = "button12";
+            button12.Size = new Size(106, 23);
+            button12.TabIndex = 15;
+            button12.Text = "Gen-NDQuest";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(Generate_Client);
+            groupBox3.Controls.Add(button12);
+            groupBox3.Location = new Point(666, 21);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(122, 292);
+            groupBox3.TabIndex = 16;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Experimental";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(button12);
+            Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Controls.Add(Generate_Client);
             Name = "Form1";
             Text = "Quest Viewer";
             groupBox1.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -252,5 +265,6 @@
         private GroupBox groupBox2;
         private Button button12;
         private Button button13;
+        private GroupBox groupBox3;
     }
 }
