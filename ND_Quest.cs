@@ -17,12 +17,14 @@ namespace QuestEditor_V2
         List<STR_File> STR_QuestSummaryContents;
         List<STR_File> STR_QuestBriefContents;
         List<STR_File> STR_QuestConditionResult;
+        List<STR_File> STR_QuestMissingResult;
         List<STR_File> STR_QuestName;
 
         List<Value_16> Section2;
 
         NameValueCollection QuestBrief_KV_List = new NameValueCollection();
         NameValueCollection QuestCondition_KV_List = new NameValueCollection();
+        NameValueCollection QuestMissing_KV_List = new NameValueCollection();
         NameValueCollection QuestFinish_KV_List = new NameValueCollection();
         NameValueCollection QuestSummary_KV_List = new NameValueCollection();
         NameValueCollection QuestName_KV_List = new NameValueCollection();
@@ -273,6 +275,46 @@ namespace QuestEditor_V2
 
         }
 
+        private void QuestMissingValues()
+        {
+            STR_QuestMissingResult = new List<Structure.STR_File>();
+           
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(0, Encoding.UTF8.GetBytes("X000000"), "Conversation with %MERCHANT"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(1, Encoding.UTF8.GetBytes("X000001"), "Level %VALUE accomplishment"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(2, Encoding.UTF8.GetBytes("X000002"), "%ITEM"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(3, Encoding.UTF8.GetBytes("X000003"), "Get rid of %MONSTER"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(4, Encoding.UTF8.GetBytes("X000004"), "Hunt %MONSTER"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(5, Encoding.UTF8.GetBytes("X000005"), "Catch %MONSTER"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(6, Encoding.UTF8.GetBytes("X000006"), "%ITEM Production"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(7, Encoding.UTF8.GetBytes("X000007"), "%ITEM Mining"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(8, Encoding.UTF8.GetBytes("X000008"), "%ITEM Processing"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(9, Encoding.UTF8.GetBytes("X000009"), "Deliver this item to %MERCHANT"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(10, Encoding.UTF8.GetBytes("X000010"), "Confim Briefing"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(11, Encoding.UTF8.GetBytes("X000011"), "Chip has received from Bellato's Control center"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(12, Encoding.UTF8.GetBytes("X000012"), "Chip has received from Cora's Control center"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(13, Encoding.UTF8.GetBytes("X000013"), "Chip has received from Accrecia's Control center"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(14, Encoding.UTF8.GetBytes("X000014"), "Receive more than %VALUE contribution points"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(15, Encoding.UTF8.GetBytes("X000015"), "Protect out Control Center"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(16, Encoding.UTF8.GetBytes("X000016"), "Collect Quest item from %MONSTER"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(17, Encoding.UTF8.GetBytes("X000017"), "Kill %SUM of %MONSTER"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(18, Encoding.UTF8.GetBytes("X000018"), "Acquire %ITEM Map"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(19, Encoding.UTF8.GetBytes("X000019"), "%ITEM Use"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(20, Encoding.UTF8.GetBytes("X000020"), "Eliminate %RACE"));
+            STR_QuestMissingResult.Add(STR.Fake_Read_Quest_STR(21, Encoding.UTF8.GetBytes("X000021"), "Observe %MERCHANT"));
+           
+            foreach (var str in STR_QuestMissingResult)
+            {
+                string ID = Encoding.UTF8.GetString(str.m_strCode, 0, str.m_strCode.Length);
+                string name = Encoding.UTF8.GetString(str.m_strName_3, 0, str.m_strName_3.Length);
+
+                string purge0 = ID.Replace("\0", string.Empty);
+                string purge1 = name.Replace("\0", string.Empty);
+
+                QuestMissing_KV_List.Add(purge0, purge1);
+
+            }
+        }
+
         private void QuestFinishContents()
         {
             string path = "QuestFinishContents_str.dat";
@@ -353,6 +395,7 @@ namespace QuestEditor_V2
             QuestBriefContents();
             QuestSummaryContents();
             QuestConditionResult();
+            QuestMissingValues();
             QuestFinishContents();
             QuestItemContents();
 
@@ -441,8 +484,8 @@ namespace QuestEditor_V2
                         Section2.Add(test);
                         index++;
                     }
-                    // 22 string section missing has Text_Location_file as 17
-                    foreach (string key in QuestFinish_KV_List)
+
+                    foreach (string key in QuestMissing_KV_List) // 22 string section missing has Text_Location_file as 17
                     {
                         Value_16 test = new Value_16();
                         int n = help.NDQUest_Hex(key);
@@ -450,10 +493,23 @@ namespace QuestEditor_V2
                         test.m_dwIndex = index;
                         test.unk_0 = BitConverter.ToInt16(new byte[2] { (byte)str[0], (byte)str[1] }, 0);
                         test.unk_1 = str[2];
-                        if (index == 4175-22)
-                        {
-                            int hello = 0;
-                        }
+                        test.Text_Location_file = str[3]; //always 11
+                        test.unk_3 = 0;
+                        test.unk_4 = 0;
+                        test.unk_5 = 0;
+                        test.SplitNameLength = (short)(QuestMissing_KV_List[key].Count() + 1);
+                        Section2.Add(test);
+                        index++;
+                    }
+                    
+                    foreach (string key in QuestFinish_KV_List)
+                    {
+                        Value_16 test = new Value_16();
+                        int n = help.NDQUest_Hex(key);
+                        byte[] str = BitConverter.GetBytes(n);
+                        test.m_dwIndex = index;
+                        test.unk_0 = BitConverter.ToInt16(new byte[2] { (byte)str[0], (byte)str[1] }, 0);
+                        test.unk_1 = str[2];                        
                         test.Text_Location_file = str[3]; //always 20 mostly fail is 5
                         test.unk_3 = 0;
                         test.unk_4 = 0;
@@ -501,15 +557,20 @@ namespace QuestEditor_V2
                         bin.Write(bytes);
                         bin.Write((byte)0);
                     }
-                    // 22 string section missing 
+                   
+                    foreach (string key in QuestMissing_KV_List) // 22 string section missing 
+                    {
+                        byte[] bytes = Encoding.UTF8.GetBytes(QuestMissing_KV_List[key]);
+                        bin.Write(bytes);
+                        bin.Write((byte)0);
+                    }
+
                     foreach (string key in QuestFinish_KV_List)
                     {
                         byte[] bytes = Encoding.UTF8.GetBytes(QuestFinish_KV_List[key]);
                         bin.Write(bytes);
                         bin.Write((byte)0);
                     }
-
-
 
                 }
             }
@@ -521,6 +582,7 @@ namespace QuestEditor_V2
             QuestBriefContents();
             QuestSummaryContents();
             QuestConditionResult();
+            QuestMissingValues();
             QuestFinishContents();
 
             int i = 0;
@@ -554,12 +616,19 @@ namespace QuestEditor_V2
                         bin.Write(bytes);
                         i++;
                     }
-                    foreach (string key in QuestCondition_KV_List) ////needs 22 more strings to match what client default has
+                    foreach (string key in QuestCondition_KV_List) 
                     {
                         byte[] bytes = Encoding.UTF8.GetBytes(string.Format("{0},{1}{2}", i.ToString(), QuestCondition_KV_List[key], Environment.NewLine));
                         bin.Write(bytes);
                         i++;
                     }
+                    foreach (string key in QuestMissing_KV_List) 
+                    {
+                        byte[] bytes = Encoding.UTF8.GetBytes(string.Format("{0},{1}{2}", i.ToString(), QuestMissing_KV_List[key], Environment.NewLine));
+                        bin.Write(bytes);
+                        i++;
+                    }
+
                     foreach (string key in QuestFinish_KV_List)
                     {
                         byte[] bytes = Encoding.UTF8.GetBytes(string.Format("{0},{1}{2}", i.ToString(), QuestFinish_KV_List[key], Environment.NewLine));

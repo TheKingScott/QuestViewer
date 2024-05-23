@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.Devices;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -361,6 +362,27 @@ namespace QuestEditor_V2
 
             return header;
         }
+        public STR_File Fake_Read_Quest_STR(int Index, byte[] strCode, string strName3)
+        {
+            STR_File header = new STR_File();
+            header.m_dwIndex = Index;
+            byte[] bytes = Encoding.UTF8.GetBytes(strName3);
+            header.m_strCode = strCode;
+            header.m_strName_0 = new byte[0];
+            header.m_strName_1 = new byte[0]; ;
+            header.m_strName_2 = bytes;
+            header.m_strName_3 = new byte[0];
+            header.m_strName_4 = new byte[0];
+            header.m_strName_5 = new byte[0];
+            header.m_strName_6 = new byte[0];
+            header.m_strName_7 = new byte[0];
+            header.m_strName_8 = new byte[0];
+            header.m_strName_9 = new byte[0];
+            header.m_strName_10 = new byte[0];
+
+            return header;
+        }
+
 
         // Other quest files::
 
@@ -613,8 +635,11 @@ namespace QuestEditor_V2
         {
             Helpers helper = new Helpers();
             Bin.Write(item.m_dwIndex);
-            Bin.Write(helper.ByteExpand40(item.m_strName));
-           
+            string test =System.Text.Encoding.UTF8.GetString(item.m_strID);
+            Bin.Write(helper.QuestItem_Hex(test));
+            Bin.Write(item.m_dwIndex+1);
+            Bin.Write(helper.ByteExpand32(item.m_strName));
+
         }
 
     }

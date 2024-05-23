@@ -33,10 +33,10 @@ namespace QuestEditor_V2
             return holder;
         }
 
-        public byte[] ByteExpand40(byte[] Bytes)
+        public byte[] ByteExpand36(byte[] Bytes)
         {
-            byte[] holder = new byte[40];
-            for (int i = 0; i < 40; i++)
+            byte[] holder = new byte[36];
+            for (int i = 0; i < 36; i++)
             {
                 if (i < Bytes.Length)
                 {
@@ -540,6 +540,19 @@ namespace QuestEditor_V2
             return hex;
         }
 
+        public int QuestItem_Hex(string Bytes)
+        {
+            int test = 0;
+            string purge0 = Bytes.Replace("\0", string.Empty);
+            if (purge0.Length == 7)
+            {               
+                string result1 = purge0.Substring(3, 4);
+                string value1 = string.Format("{0}{1}{2}", 49, 51, result1);
+                test = Convert.ToInt32(value1, 16);
+            }
+                return test;
+        }
+
         public int NDQUest_Hex(string Bytes)
         {
             int test = 0;
@@ -566,17 +579,17 @@ namespace QuestEditor_V2
                     string value = string.Format("{0}{1}", 2, result);
                     test = Convert.ToInt32(value, 16);
                 }
-                if (Bytes.StartsWith("Somevalue") == true) // missing section values
+                if (Bytes.StartsWith("X") == true) // missing section values
                 {
                     string value = string.Format("{0}{1}", 11, result);
                     test = Convert.ToInt32(value, 16);
                 }
-                if (Bytes.StartsWith("U") == true) // QuestFinish values
+                if (Bytes.StartsWith("U") == true) // QuestFinish success values
                 {
                     string value = string.Format("{0}{1}", 14, result);
                     test = Convert.ToInt32(value, 16);
                 }
-                if (Bytes.StartsWith("F") == true) // Questfinish values
+                if (Bytes.StartsWith("F") == true) // Questfinish fail values
                 {
                     string value = string.Format("{0}{1}", 5, result);
                     test = Convert.ToInt32(value, 16);
